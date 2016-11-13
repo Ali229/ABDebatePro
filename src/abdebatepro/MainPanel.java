@@ -1,46 +1,25 @@
 package abdebatepro;
 //========================== Imports =========================================//
 import static abdebatepro.ABDebatePro.DBURL;
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import static java.awt.Color.RED;
 import java.awt.Component;
-import java.awt.Dialog;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
-
 public class MainPanel extends javax.swing.JPanel {
     //========================== Declarations ==================================
     public String user, pass;
@@ -69,26 +48,19 @@ public class MainPanel extends javax.swing.JPanel {
             //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             //UIManager.setLookAndFeel(new SyntheticaSilverMoonLookAndFeel());
             //BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.osLookAndFeelDecorated;
-            
-            
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e);
         }
-        
         initComponents();
         setupDB();
         //bottomPanel.setVisible(false);
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
-
         TableModel tableModel = schTable.getModel();
-
-        for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++)
-        {
+        for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++) {
             schTable.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer);
-        } 
-        renderer = (DefaultTableCellRenderer)schTable.getTableHeader().getDefaultRenderer();
+        }
+        renderer = (DefaultTableCellRenderer) schTable.getTableHeader().getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
     }
     /**
@@ -340,48 +312,44 @@ public class MainPanel extends javax.swing.JPanel {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
             stmt = c1.createStatement();
-	}
-	catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
     public void populateDropBox() {
         a.count();
         int noOfTeams = a.count;
         noOfWeeks = 0;
- 
         if (noOfTeams == 2) {
-            noOfWeeks = 1; 
+            noOfWeeks = 1;
         }
         if (noOfTeams == 3) {
             noOfWeeks = 3;
         }
         if (noOfTeams == 4) {
-            noOfWeeks = 6; 
+            noOfWeeks = 6;
         }
         if (noOfTeams >= 5) {
-            noOfWeeks = 10; 
+            noOfWeeks = 10;
         }
-        String[] weekBoxString = new String[noOfWeeks+1];
+        String[] weekBoxString = new String[noOfWeeks + 1];
         weekBoxString[0] = "All Weeks";
-        for(int i = 0; i < noOfWeeks; i++){
-            weekBoxString[i+1] = "Week " + (i + 1); 
+        for (int i = 0; i < noOfWeeks; i++) {
+            weekBoxString[i + 1] = "Week " + (i + 1);
         }
         weekBox.setModel(new javax.swing.DefaultComboBoxModel<>(weekBoxString));
         weekBox.setSelectedIndex(0);
         loginButton.requestFocusInWindow();
-        
     }
     //========================== Checks Teams From Database ====================
     public void checkTeams() {
         try {
-            int count=0;
+            int count = 0;
             String sql = "SELECT count(*) AS total from Teams";
             PreparedStatement pstmt = c1.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            while( rs.next() ) 
-            {
-                count=rs.getInt("total");
+            while (rs.next()) {
+                count = rs.getInt("total");
             }
             if (count == 0) {
                 JOptionPane.showMessageDialog(null, "No teams are added to the database, please add some teams.", "Error!" + "", JOptionPane.INFORMATION_MESSAGE);
@@ -389,7 +357,8 @@ public class MainPanel extends javax.swing.JPanel {
         } catch (Exception e) {
             System.out.println(e);
         }
-    }    public void Refresh() {
+    }
+    public void Refresh() {
         /*try {
             Connection c1 = DriverManager.getConnection(DBURL);
             Statement stmt = c1.createStatement();
@@ -412,27 +381,27 @@ public class MainPanel extends javax.swing.JPanel {
             DefaultTableModel yourModel = (DefaultTableModel) schTable.getModel();
             yourModel.setRowCount(0);
             while (rs.next()) {
-               yourModel = (DefaultTableModel) schTable.getModel();
-               yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam")
-                       , rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate")});
+                yourModel = (DefaultTableModel) schTable.getModel();
+                yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam"),
+                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate")});
             }
             c1.close();
             pstmt.close();
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Error was here:" + e);
-	}
+        }
         try {
             Connection c1 = DriverManager.getConnection(DBURL);
             Statement stmt = c1.createStatement();
             ResultSet rs = stmt.executeQuery("select Count(MatchNumber) AS TotalNumber from Schedule");
             while (rs.next()) {
-               int number = rs.getInt("TotalNumber");
-               totalGames.setText("Total Games: " + Integer.toString(number));
+                int number = rs.getInt("TotalNumber");
+                totalGames.setText("Total Games: " + Integer.toString(number));
             }
             c1.close();
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
         //populateDropBox();
     }    //========================== Prompts To Reenter Password ===================
     public void promptPassword() {
@@ -443,11 +412,10 @@ public class MainPanel extends javax.swing.JPanel {
         Teams t1 = new Teams();
         t1.selectAllDB();
         if (t1.getID() == 0) {
-           JOptionPane.showMessageDialog(null, "There are no teams, please add some teams!");
-        }  else{
-             if (schTable.getRowCount() > 0) {
+            JOptionPane.showMessageDialog(null, "There are no teams, please add some teams!");
+        } else {
+            if (schTable.getRowCount() > 0) {
                 JOptionPane.showMessageDialog(null, "Warning, previous Schedule would be replaced!");
-
                 promptPassword();
                 if (LoginPage.accessGrant == true) {
                     a.count();
@@ -457,55 +425,64 @@ public class MainPanel extends javax.swing.JPanel {
                     Refresh();
                 }
             } else {
-              a.count();
-              a.makeSch();
-              a.insertSch();
-              populateDropBox();
-              Refresh();  
-            } 
+                a.count();
+                a.makeSch();
+                a.insertSch();
+                populateDropBox();
+                Refresh();
+            }
         }
     }//GEN-LAST:event_matchButtonActionPerformed
 
     private void scoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_scoreButtonActionPerformed
-        if (!(schTable.getSelectedRow() == -1)) {        
-        int scoreOne, scoreTwo;
-        scoreOne = (Integer) schTable.getValueAt(schTable.getSelectedRow(), 3);
-        scoreTwo = (Integer)schTable.getValueAt(schTable.getSelectedRow(), 4);
-        if ((scoreOne == 0 && scoreTwo == 0) || privLabel.getText().equals("Super Referee")) {
-            JTextField scoreField = new JTextField(10);
-            JTextField scoreField2 = new JTextField(10);
-
-            JPanel myPanel = new JPanel();
-            GridLayout layout = new GridLayout(2, 2, 5, 5);
-            // two j lables for the edit score button
-            myPanel.add(new JLabel("Team " + schTable.getValueAt(schTable.getSelectedRow(), 1) + " Score:"));
-            myPanel.add(scoreField);
-            myPanel.setLayout(layout);
-
-            myPanel.add(new JLabel("Team " + schTable.getValueAt(schTable.getSelectedRow(), 2) + " Score:"));
-            myPanel.add(scoreField2);
-            myPanel.setLayout(layout);
-
-            int result = JOptionPane.showConfirmDialog(null, myPanel,
-                "Edit Score", JOptionPane.OK_CANCEL_OPTION);
-            if (result == JOptionPane.OK_OPTION) {
-                int teamScore = Integer.parseInt(scoreField.getText());
-                try {
-                    Schedule sch = new Schedule();
-                    System.out.println(schTable.getSelectedRow() + 1);
-                    sch.selectDB(schTable.getSelectedRow() +1 );
-                    sch.updateScore(sch.getMatchNumber(),Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
-                    Teams t1 = new Teams();
-                    t1.CalculateTeamScore();
-                } catch (Exception e) {
-                    System.out.println(e);
-                } finally {
-                    Refresh();
-                }
+        if (!(schTable.getSelectedRow() == -1)) {
+            int scoreOne, scoreTwo;
+            scoreOne = (Integer) schTable.getValueAt(schTable.getSelectedRow(), 3);
+            scoreTwo = (Integer) schTable.getValueAt(schTable.getSelectedRow(), 4);
+            if ((scoreOne == 0 && scoreTwo == 0) || privLabel.getText().equals("Super Referee")) {
+                JTextField scoreField = new JTextField(10);
+                JTextField scoreField2 = new JTextField(10);
+                JPanel myPanel = new JPanel();
+                GridLayout layout = new GridLayout(2, 2, 5, 5);
+                // two j lables for the edit score button
+                myPanel.add(new JLabel("Team " + schTable.getValueAt(schTable.getSelectedRow(), 1) + " Score:"));
+                myPanel.add(scoreField);
+                myPanel.setLayout(layout);
+                myPanel.add(new JLabel("Team " + schTable.getValueAt(schTable.getSelectedRow(), 2) + " Score:"));
+                myPanel.add(scoreField2);
+                myPanel.setLayout(layout);
+                String regex = "[0-9]+";
+                int result = JOptionPane.showConfirmDialog(null, myPanel,
+                        "Edit Score", JOptionPane.OK_CANCEL_OPTION);
+                String score1 = scoreField.getText();
+                String score2 = scoreField2.getText();
+                if (result == JOptionPane.OK_OPTION) {
+                    if (score1.matches(regex) && score2.matches(regex)) {
+                        if (Integer.parseInt(score1) >= 0 && Integer.parseInt(score1) < 11 && Integer.parseInt(score2) >= 0 && Integer.parseInt(score2) < 11) {
+                            try {
+                                Schedule sch = new Schedule();
+                                System.out.println(schTable.getSelectedRow() + 1);
+                                sch.selectDB(schTable.getSelectedRow() + 1);
+                                sch.updateScore(sch.getMatchNumber(), Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
+                                Teams t1 = new Teams();
+                                t1.CalculateTeamScore();
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            } finally {
+                                Refresh();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Score should be between 0 and 10!");
+                            scoreButton.doClick();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Enter a valid score between 0 and 10!");
+                        scoreButton.doClick();
+                    }
+                }//no else
+            } else {
+                JOptionPane.showMessageDialog(null, "Only Super Referee is authorized to change scores!");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Only Super Referee is authorized to change scores!");
-        }
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }
@@ -528,43 +505,40 @@ public class MainPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_startDateButtonActionPerformed
 
     private void tabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsStateChanged
-        if(tabs.getSelectedIndex() == 1) {
+        if (tabs.getSelectedIndex() == 1) {
             try {
-            Connection c1 = DriverManager.getConnection(DBURL);
-            PreparedStatement pstmt = c1.prepareStatement("select * from Teams Order by TeamScore DESC");
-            ResultSet rs = pstmt.executeQuery();
-            DefaultTableModel yourModel = (DefaultTableModel) teamTable.getModel();
-            yourModel.setRowCount(0);
-            while (rs.next()) {
-               yourModel = (DefaultTableModel) teamTable.getModel();
-               yourModel.addRow(new Object[]{rs.getString("TeamName"), rs.getInt("TeamScore")});
+                Connection c1 = DriverManager.getConnection(DBURL);
+                PreparedStatement pstmt = c1.prepareStatement("select * from Teams Order by TeamScore DESC");
+                ResultSet rs = pstmt.executeQuery();
+                DefaultTableModel yourModel = (DefaultTableModel) teamTable.getModel();
+                yourModel.setRowCount(0);
+                while (rs.next()) {
+                    yourModel = (DefaultTableModel) teamTable.getModel();
+                    yourModel.addRow(new Object[]{rs.getString("TeamName"), rs.getInt("TeamScore")});
+                }
+                c1.close();
+                pstmt.close();
+            } catch (Exception e) {
+                System.out.println("Error was here:" + e);
             }
-            c1.close();
-            pstmt.close();
-	} catch (Exception e) {
-            System.out.println("Error was here:" + e);
-	}
-            
         }
     }//GEN-LAST:event_tabsStateChanged
 
     private void weekBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weekBoxActionPerformed
         Dates d1 = new Dates();
         d1.selectDB();
-
         Calendar cal = Calendar.getInstance();
         cal.setTime(d1.sDate);
-        DateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         //select date from datesch where "somedate" = schdate
-        if (weekBox.getSelectedItem().equals("All Weeks")){
+        if (weekBox.getSelectedItem().equals("All Weeks")) {
             sqlStatement = "select * from Schedule Order by MatchNumber ASC";
-
-        } else if(weekBox.getSelectedItem().equals("Week 1")) {
+        } else if (weekBox.getSelectedItem().equals("Week 1")) {
             sqlStatement = "select * from Schedule where MatchDate = #" + d1.sDate + "# Order by MatchNumber ASC";
         } else {
-            for (int i = 0; i < noOfWeeks; i++){
-                if(weekBox.getSelectedItem().equals("Week " + (i + 2))) {
-                    cal.add(Calendar.DATE, 7 * (i+1));
+            for (int i = 0; i < noOfWeeks; i++) {
+                if (weekBox.getSelectedItem().equals("Week " + (i + 2))) {
+                    cal.add(Calendar.DATE, 7 * (i + 1));
                     sqlStatement = "select * from Schedule where MatchDate = #" + dateFormat.format(cal.getTime()) + "# Order by MatchNumber ASC";
                     System.out.println("The week you selected is : " + weekBox.getSelectedItem());
                     //weekBox.setSelectedIndex(weekBox.getSelectedItem().);
@@ -586,8 +560,7 @@ public class MainPanel extends javax.swing.JPanel {
         if (loginButton.getText().equals("Admin Login")) {
             LoginPage lp = new LoginPage(ABDebatePro.ab, true);
             lp.setVisible(true);
-        }
-        else if (loginButton.getText().equals("Logout")) {
+        } else if (loginButton.getText().equals("Logout")) {
             bottomPanel.setVisible(false);
             loginButton.setText("Admin Login");
             loginLabel.setText("");
@@ -604,7 +577,6 @@ public class MainPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }
     }//GEN-LAST:event_changeMatchDateActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel bottomPanel;
