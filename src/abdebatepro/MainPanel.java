@@ -5,12 +5,15 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.Box;
 import javax.swing.JLabel;
@@ -53,7 +56,7 @@ public class MainPanel extends javax.swing.JPanel {
         }
         initComponents();
         setupDB();
-        bottomPanel.setVisible(false);
+        //bottomPanel.setVisible(false);
         settingsButton.setVisible(false);
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
@@ -597,7 +600,19 @@ public class MainPanel extends javax.swing.JPanel {
 
     private void changeMatchDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeMatchDateActionPerformed
         if (!(schTable.getSelectedRow() == -1)) {
-            DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");
+            String n1 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 1);
+            String n2 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 2);
+            Schedule s1 = new Schedule();
+            Schedule.datesList.clear();
+            s1.storeDate(n1, n2);
+            s1.storeDate2(n1, n2);
+            for (LocalDate d : Schedule.datesList) {
+                        System.out.println(d);
+                        //setDisable(item.getMonth() == Schedule.datesList.forEach(LocalDate d:Schedule.datesList) );
+                        
+                    }
+            System.out.println(" line 2");
+            DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");      
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }
