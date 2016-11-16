@@ -53,7 +53,8 @@ public class MainPanel extends javax.swing.JPanel {
         }
         initComponents();
         setupDB();
-        //bottomPanel.setVisible(false);
+        bottomPanel.setVisible(false);
+        settingsButton.setVisible(false);
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
         TableModel tableModel = schTable.getModel();
@@ -77,6 +78,8 @@ public class MainPanel extends javax.swing.JPanel {
         topLabel = new javax.swing.JLabel();
         weekBox = new javax.swing.JComboBox<>();
         rightSidePanel = new javax.swing.JPanel();
+        adminPanel = new javax.swing.JPanel();
+        settingsButton = new javax.swing.JButton();
         loginButton = new javax.swing.JButton();
         loginLabel = new javax.swing.JLabel();
         privLabel = new javax.swing.JLabel();
@@ -99,7 +102,7 @@ public class MainPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1280, 720));
         setLayout(new java.awt.BorderLayout());
 
-        topPanel.setPreferredSize(new java.awt.Dimension(322, 78));
+        topPanel.setPreferredSize(new java.awt.Dimension(322, 80));
 
         leftSidePanel.setLayout(new javax.swing.BoxLayout(leftSidePanel, javax.swing.BoxLayout.Y_AXIS));
 
@@ -118,16 +121,35 @@ public class MainPanel extends javax.swing.JPanel {
         });
         leftSidePanel.add(weekBox);
 
-        rightSidePanel.setLayout(new javax.swing.BoxLayout(rightSidePanel, javax.swing.BoxLayout.PAGE_AXIS));
+        rightSidePanel.setLayout(new javax.swing.BoxLayout(rightSidePanel, javax.swing.BoxLayout.Y_AXIS));
+
+        adminPanel.setLayout(new javax.swing.BoxLayout(adminPanel, javax.swing.BoxLayout.X_AXIS));
+        adminPanel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+
+        settingsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/abdebatepro/wrench.png"))); // NOI18N
+        settingsButton.setMaximumSize(new java.awt.Dimension(30, 30));
+        settingsButton.setMinimumSize(new java.awt.Dimension(30, 30));
+        settingsButton.setPreferredSize(new java.awt.Dimension(30, 30));
+        settingsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsButtonActionPerformed(evt);
+            }
+        });
+        adminPanel.add(settingsButton);
 
         loginButton.setText("Admin Login");
-        loginButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        loginButton.setMaximumSize(new java.awt.Dimension(103, 30));
+        loginButton.setMinimumSize(new java.awt.Dimension(103, 30));
+        loginButton.setPreferredSize(new java.awt.Dimension(103, 30));
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
             }
         });
-        rightSidePanel.add(loginButton);
+        adminPanel.add(loginButton);
+        superPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+
+        rightSidePanel.add(adminPanel);
 
         loginLabel.setText("   ");
         loginLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -144,8 +166,8 @@ public class MainPanel extends javax.swing.JPanel {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 838, Short.MAX_VALUE)
-                .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 808, Short.MAX_VALUE)
+                .addComponent(rightSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         topPanelLayout.setVerticalGroup(
@@ -153,8 +175,10 @@ public class MainPanel extends javax.swing.JPanel {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rightSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(topPanelLayout.createSequentialGroup()
+                        .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(20, Short.MAX_VALUE))
+                    .addComponent(rightSidePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         add(topPanel, java.awt.BorderLayout.PAGE_START);
@@ -232,7 +256,7 @@ public class MainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(totalGames)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
+                .addComponent(tabs, javax.swing.GroupLayout.DEFAULT_SIZE, 556, Short.MAX_VALUE))
         );
 
         add(midPanel, java.awt.BorderLayout.CENTER);
@@ -567,6 +591,7 @@ public class MainPanel extends javax.swing.JPanel {
             privLabel.setText("");
             LoginPage.storeUser = "";
             LoginPage.storePass = "";
+            settingsButton.setVisible(false);
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
@@ -578,7 +603,13 @@ public class MainPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_changeMatchDateActionPerformed
 
+    private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
+        Settings s1 = new Settings(ABDebatePro.ab, true);
+        s1.setVisible(true);
+    }//GEN-LAST:event_settingsButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    public static javax.swing.JPanel adminPanel;
     public static javax.swing.JPanel bottomPanel;
     public static javax.swing.JButton changeMatchDate;
     public static javax.swing.JButton editTeam;
@@ -592,6 +623,7 @@ public class MainPanel extends javax.swing.JPanel {
     public static javax.swing.JScrollPane schScrollPane;
     public javax.swing.JTable schTable;
     public static javax.swing.JButton scoreButton;
+    public static javax.swing.JButton settingsButton;
     public static javax.swing.JButton startDateButton;
     public static javax.swing.JPanel superPanel;
     public static javax.swing.JTabbedPane tabs;

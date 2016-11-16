@@ -209,6 +209,7 @@ public class LoginPage extends javax.swing.JDialog {
             storeUser = rs.getString("Username");
             storePass = rs.getString("Password");
             accessGrant = true;
+            MainPanel.settingsButton.setVisible(true);
             if (rs.getString("Privilege").equals("Super Referee")) {
                 MainPanel.superPanel.setVisible(true); 
             }
