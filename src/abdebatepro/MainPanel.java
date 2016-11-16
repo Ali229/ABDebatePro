@@ -136,6 +136,7 @@ public class MainPanel extends javax.swing.JPanel {
             }
         });
         adminPanel.add(settingsButton);
+        adminPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         loginButton.setText("Admin Login");
         loginButton.setMaximumSize(new java.awt.Dimension(103, 30));
@@ -147,7 +148,6 @@ public class MainPanel extends javax.swing.JPanel {
             }
         });
         adminPanel.add(loginButton);
-        superPanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
         rightSidePanel.add(adminPanel);
 
