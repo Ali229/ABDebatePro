@@ -25,8 +25,8 @@ public class Settings extends javax.swing.JDialog {
     PreparedStatement pstmt;
     public Connection c1;
     public Statement stmt;
-    public String user, pass;
-    String someUser, somePass, currentPassword, newPassword, passwordConfirmed;
+    public String user;
+    String currentPassword, newPassword, passwordConfirmed;
 
     /**
      * Creates new form Settings
@@ -116,8 +116,8 @@ public class Settings extends javax.swing.JDialog {
         JPanel myPanel = new JPanel();
         GridLayout layout = new GridLayout(4, 2, 0, 0);
 
-        myPanel.add(new JLabel("Username:"));
-        myPanel.add(userInput);
+//        myPanel.add(new JLabel("Username:"));
+//        myPanel.add(userInput);
         myPanel.add(new JLabel("Current Password:"));
         myPanel.add(currentPasswordInput);
         myPanel.add(new JLabel("New Password:"));
@@ -130,47 +130,47 @@ public class Settings extends javax.swing.JDialog {
                 "Password Reset", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             user = userInput.getText();
-            pass = currentPasswordInput.getText();
             currentPassword = currentPasswordInput.getText();
             newPassword = NewPasswordInput.getText();
             passwordConfirmed = NewPasswordConfirmInput.getText();
+            user = LoginPage.storeUser;
+            if (currentPassword.equals(LoginPage.storePass)) {
 
-            setupDB();
-            try {
-                //String sql = "SELECT * FROM Logins where Password=?";
-                if (currentPassword.equals(pass)) {
-                    String sql = "Update Logins set Password = ? where Username = ?";
-                    pstmt = c1.prepareStatement(sql);
-                    pstmt.setString(1, newPassword);
-                    pstmt.setString(2, user);
+                if (newPassword.equals(passwordConfirmed)) {
+                    try {
+                        setupDB();
+                        String sql = "Update Logins set Password = ? where Username = ?";
+                        pstmt = c1.prepareStatement(sql);
+                        pstmt.setString(1, newPassword);
+                        pstmt.setString(2, user);
 
-                    System.out.println(sql);
-                    int k = pstmt.executeUpdate();
+                        System.out.println(sql);
+                        int k = pstmt.executeUpdate();
 
-                    if (k == 1) {
+                        if (k == 1) {
 
-                        System.out.println("Password has been updated");
-                    } else {
-                        System.out.println("Incorrect username/password");
+                            System.out.println("Password has been updated");
+                        } else {
+                            System.out.println("Incorrect password or new password and confirmation password don't match");
+                        }
+                        pstmt.close();
+                        c1.close();
+                    } catch (Exception e) {
+                        System.out.println(e);
                     }
-                } else if (!newPassword.equals(passwordConfirmed)) {
+
+                } else {
+
                     JOptionPane.showMessageDialog(null, "New password and confirmed password don't match, try again");
                     changePassword.doClick();
-                } else {
-                    if (!currentPassword.equals(pass)) {
-                        JOptionPane.showMessageDialog(null, "Your current Password is incorrect, try again");
-                        changePassword.doClick();
-                    }
 
                 }
-
-                pstmt.close();
-
-                c1.close();
-            } catch (Exception e) {
-                System.out.println(e);
+            } else {
+                JOptionPane.showMessageDialog(null, "Your current Password is incorrect, try again");
+                changePassword.doClick();
             }
         }
+
 
     }//GEN-LAST:event_changePasswordActionPerformed
 
