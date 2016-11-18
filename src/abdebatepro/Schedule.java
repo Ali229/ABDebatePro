@@ -14,7 +14,7 @@ public class Schedule {
 
     //========================== Properties ==================================//
     public int MatchNumber, FirstTeamScore, SecondTeamScore;
-    public String FirstTeam, SecondTeam;
+    public String FirstTeam, SecondTeam, Time;
     public Date MatchDate;
     public Connection c1;
     public Statement stmt;
@@ -29,15 +29,17 @@ public class Schedule {
         FirstTeam = "";
         SecondTeam = "";
         MatchDate = null;
+        Time = "";
     }
 
-    public Schedule(int m, int s1, int s2, String ft, String st, Date d) {
+    public Schedule(int m, int s1, int s2, String ft, String st, Date d, String t) {
         MatchNumber = m;
         FirstTeamScore = s1;
         SecondTeamScore = s2;
         FirstTeam = ft;
         SecondTeam = st;
         MatchDate = d;
+        Time = t;
     }
 
     //========================== Behaviors ===================================//
@@ -88,6 +90,13 @@ public class Schedule {
     public Date getMatchDate() {
         return MatchDate;
     }
+    public void setTime(String t) {
+        Time = t;
+    }
+
+    public String getTime() {
+        return Time;
+    }
 
     //========================== DB Commands =================================//
     //========================== SetupDB =====================================//
@@ -114,6 +123,7 @@ public class Schedule {
                 FirstTeamScore = rs.getInt("FirstTeamScore");
                 SecondTeamScore = rs.getInt("SecondTeamScore");
                 MatchDate = rs.getDate("MatchDate");
+                Time = rs.getString("Time");
             }
             c1.close();
         } catch (Exception e) {
@@ -122,18 +132,19 @@ public class Schedule {
     }
 
     //========================== InsertDB ====================================//
-    public void insertDB(int m, String ft, String st, int s1, int s2, Date d) {
+    public void insertDB(int m, String ft, String st, int s1, int s2, Date d, String t) {
         MatchNumber = m;
         FirstTeam = ft;
         SecondTeam = st;
         FirstTeamScore = s1;
         SecondTeamScore = s2;
         MatchDate = d;
+        Time = t;
         setupDB();
         try {
 
             //String sql = "insert into Schedule (MatchNumber, FirstTeam, SecondTeam, FirstTeamScore, SecondTeamScore, MatchDate)  values " + "(" + m + ",'" + ft + "','" + st + "'," + s1 + "," + s2+ ",'" + d  + "')";
-            String sql = "insert into Schedule (MatchNumber, FirstTeam, SecondTeam, FirstTeamScore, SecondTeamScore, MatchDate)  values  (?, ?, ?, ?, ?, ?)";
+            String sql = "insert into Schedule (MatchNumber, FirstTeam, SecondTeam, FirstTeamScore, SecondTeamScore, MatchDate, Time)  values  (?, ?, ?, ?, ?, ?, ?)";
             System.out.println(sql);
             PreparedStatement pstmt = c1.prepareStatement(sql);
             pstmt.setInt(1, m);
@@ -142,6 +153,7 @@ public class Schedule {
             pstmt.setInt(4, s1);
             pstmt.setInt(5, s2);
             pstmt.setDate(6, d);
+            pstmt.setString(7, t);
             int z = pstmt.executeUpdate();
             if (z == 1) {
                 System.out.println("Insert successful");
@@ -221,10 +233,10 @@ public class Schedule {
             String sql = "delete from Schedule";
             System.out.println(sql);
             int n = stmt.executeUpdate(sql);
-            if (n == 1) {
+            if (n > 0) {
                 System.out.println("Delete successful");
             } else {
-                System.out.println("Delete Failed");
+                System.out.println("Delete Failed on All");
             }
             c1.close();
         } catch (Exception fe) {

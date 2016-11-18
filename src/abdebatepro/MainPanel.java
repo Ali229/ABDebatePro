@@ -410,7 +410,7 @@ public class MainPanel extends javax.swing.JPanel {
             while (rs.next()) {
                 yourModel = (DefaultTableModel) schTable.getModel();
                 yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam"),
-                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate")});
+                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time")});
             }
             c1.close();
             pstmt.close();

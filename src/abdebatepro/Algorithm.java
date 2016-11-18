@@ -1,5 +1,6 @@
 package abdebatepro;
 
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,20 +9,30 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import javafx.concurrent.Task;
 import javax.swing.JOptionPane;
 
 public class Algorithm {
 
     //========================== Properties ==================================//
-    public int MatchNumber, FirstTeamScore, SecondTeamScore;
+    public int MatchNumber, FirstTeamScore, SecondTeamScore, count;
     public String FirstTeam, SecondTeam;
     public java.sql.Date MatchDate;
     public Connection c1;
     public Statement stmt;
     ResultSet rs;
-    public int count;
     String[][] matchupAPN;
     int matchupNumber;
+    static boolean repeat = false, repeat2 = false;
+    static int noOfElements;
+    static int counter1 = 0;
+    static int counter2 = 0;
+    static int counter3 = 0;
+    static int counter4 = 0;
+    static int timeCounter = 0;
+    static int timeCounter2 = 0;
+    static int timeCounter3 = 0;
+    static int timeCounter4 = 0;
 
     //========================== DB Commands =================================//
     //========================== SetupDB =====================================//
@@ -257,15 +268,8 @@ public class Algorithm {
 
     public static String[][] randomization(String[][] array, int noOfTeams) {
         Schedule s1 = new Schedule();
-        int noOfElements = array.length;
-        int counter1 = 0;
-        int counter2 = 0;
-        int counter3 = 0;
-        int counter4 = 0;
-        int timeCounter = 0;
-        int timeCounter2 = 0;
-        int timeCounter3 = 0;
-        int timeCounter4 = 0;
+        noOfElements = array.length;
+
         int weeklyGames1 = noOfElements / 10 + 1;
         int weeklyGames2 = noOfElements / 10;
         int[] weekPart = new int[11];
@@ -280,8 +284,7 @@ public class Algorithm {
             weekPart[i] = weeklyGames2 * (i - noOfElements % 10 + 1) + weekPart[a % 10 - 1] + 1;
         }
         weekPart[10] = noOfElements;
-        boolean repeat = false;
-        boolean repeat2 = false;
+
         int[] weeklyGames = new int[10];
         int a = noOfElements;
         if (noOfElements == 10) {
@@ -339,6 +342,20 @@ public class Algorithm {
             //time slot
             //all weeks
             for (int x = 0; x < 10; x++) {
+                timeSlotThreading(weekPart, x, array);
+            }
+            System.out.println("it's done");
+        } while (repeat || repeat2);
+
+        return array;
+    }
+static int x1 = 0;
+    public static void timeSlotThreading(int[] weekPart, int x, String[][] array) {
+        System.out.println("This is working on: " + x1);
+                    x1++;
+        Task task = new Task<Void>() {
+            @Override
+            public Void call(){
                 for (int i = weekPart[x]; i < weekPart[(x + 1)]; i++) {
                     for (int j = 1; j < 3; j++) {
                         for (int k = weekPart[x]; k < weekPart[(x + 1)]; k++) {
@@ -356,15 +373,14 @@ public class Algorithm {
 
                     timeCounter = 0;
                     timeCounter2 = 0;
+                    
                 }
+                return null;
             }
-        } while (repeat || repeat2);
-
-        return array;
-    }
-
-    public void timeSlotThreading() {
-
+        };
+        Thread thread = new Thread(task);
+        thread.setDaemon(true);
+        thread.start();
     }
 
     public static void main(String[] args) {
