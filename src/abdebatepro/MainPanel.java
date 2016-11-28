@@ -16,18 +16,22 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.Box;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 public class MainPanel extends javax.swing.JPanel {
     //========================== Declarations ==================================
     public String user, pass;
     public Connection c1;
     public Statement stmt;
+    private PreparedStatement pstmt;
     ResultSet rs;
     String someUser, somePass;
     public String sqlStatement = "select * from Schedule Order by MatchNumber ASC";
@@ -57,7 +61,12 @@ public class MainPanel extends javax.swing.JPanel {
         initComponents();
         setupDB();
         //bottomPanel.setVisible(false);
-        settingsButton.setVisible(false);
+        //settingsButton.setVisible(false);
+        tieScoreButton.setVisible(false);
+        setCellsCentered();
+        changeRef();
+    }
+    public void setCellsCentered() {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
         TableModel tableModel = schTable.getModel();
@@ -66,6 +75,50 @@ public class MainPanel extends javax.swing.JPanel {
         }
         renderer = (DefaultTableCellRenderer) schTable.getTableHeader().getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer();
+        renderer1.setHorizontalAlignment(JLabel.CENTER);
+        TableModel tableModel1 = rescheduleTable.getModel();
+        for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++) {
+            rescheduleTable.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer1);
+        }
+        renderer1 = (DefaultTableCellRenderer) rescheduleTable.getTableHeader().getDefaultRenderer();
+        renderer1.setHorizontalAlignment(JLabel.CENTER);
+    }
+    public void changeRef() {
+        setupDB();
+        TableColumn priv = schTable.getColumnModel().getColumn(7);
+        JComboBox comboBox = new JComboBox();
+        try {
+            String sql = "SELECT * from Logins";
+            pstmt = c1.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                comboBox.addItem(rs.getString("Username"));
+            }
+            c1.close();
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        priv.setCellEditor(new DefaultCellEditor(comboBox));
+    }
+    public void assignedRef() {
+        setupDB();
+        //TableColumn priv = schTable.getColumnModel().getColumn(7);
+        JComboBox comboBox = new JComboBox();
+        try {
+            String sql = "SELECT * from Logins";
+            pstmt = c1.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                comboBox.addItem(rs.getString("Username"));
+            }
+            c1.close();
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        // priv.setCellEditor(new DefaultCellEditor(comboBox));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -93,13 +146,17 @@ public class MainPanel extends javax.swing.JPanel {
         schTable = new javax.swing.JTable();
         teamScrollPane = new javax.swing.JScrollPane();
         teamTable = new javax.swing.JTable();
+        reschedulePane = new javax.swing.JScrollPane();
+        rescheduleTable = new javax.swing.JTable();
         bottomPanel = new javax.swing.JPanel();
         superPanel = new javax.swing.JPanel();
         startDateButton = new javax.swing.JButton();
         editTeam = new javax.swing.JButton();
         changeMatchDate = new javax.swing.JButton();
         matchButton = new javax.swing.JButton();
+        tieButton = new javax.swing.JButton();
         scoreButton = new javax.swing.JButton();
+        tieScoreButton = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(1280, 720));
         setPreferredSize(new java.awt.Dimension(1280, 720));
@@ -200,11 +257,11 @@ public class MainPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time"
+                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -239,6 +296,26 @@ public class MainPanel extends javax.swing.JPanel {
         teamScrollPane.setViewportView(teamTable);
 
         tabs.addTab("Total Score", teamScrollPane);
+
+        rescheduleTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        reschedulePane.setViewportView(rescheduleTable);
+
+        tabs.addTab("Reschedule", reschedulePane);
 
         javax.swing.GroupLayout midPanelLayout = new javax.swing.GroupLayout(midPanel);
         midPanel.setLayout(midPanelLayout);
@@ -302,11 +379,27 @@ public class MainPanel extends javax.swing.JPanel {
             }
         });
         superPanel.add(matchButton);
+        superPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+
+        tieButton.setText("Create Tie Schedule");
+        tieButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tieButtonActionPerformed(evt);
+            }
+        });
+        superPanel.add(tieButton);
 
         scoreButton.setText("Edit Match Score");
         scoreButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 scoreButtonActionPerformed(evt);
+            }
+        });
+
+        tieScoreButton.setText("Edit Tie Score");
+        tieScoreButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tieScoreButtonActionPerformed(evt);
             }
         });
 
@@ -317,7 +410,9 @@ public class MainPanel extends javax.swing.JPanel {
             .addGroup(bottomPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(superPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 635, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
+                .addComponent(tieScoreButton)
+                .addGap(18, 18, 18)
                 .addComponent(scoreButton)
                 .addContainerGap())
         );
@@ -327,7 +422,9 @@ public class MainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(superPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(scoreButton))
+                    .addGroup(bottomPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(scoreButton)
+                        .addComponent(tieScoreButton)))
                 .addGap(682, 682, 682))
         );
 
@@ -345,18 +442,16 @@ public class MainPanel extends javax.swing.JPanel {
     }
     public void populateDropBox() {
         a.count();
-        int noOfTeams = a.count;
-        noOfWeeks = 0;
-        if (noOfTeams == 2) {
+        if (a.numberOfTeams == 2) {
             noOfWeeks = 1;
         }
-        if (noOfTeams == 3) {
+        if (a.numberOfTeams == 3) {
             noOfWeeks = 3;
         }
-        if (noOfTeams == 4) {
+        if (a.numberOfTeams == 4) {
             noOfWeeks = 6;
         }
-        if (noOfTeams >= 5) {
+        if (a.numberOfTeams >= 5) {
             noOfWeeks = 10;
         }
         String[] weekBoxString = new String[noOfWeeks + 1];
@@ -534,6 +629,7 @@ public class MainPanel extends javax.swing.JPanel {
     private void tabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsStateChanged
         if (tabs.getSelectedIndex() == 1) {
             try {
+                bottomPanel.setVisible(false);
                 Connection c1 = DriverManager.getConnection(DBURL);
                 PreparedStatement pstmt = c1.prepareStatement("select * from Teams Order by TeamScore DESC");
                 ResultSet rs = pstmt.executeQuery();
@@ -548,9 +644,45 @@ public class MainPanel extends javax.swing.JPanel {
             } catch (Exception e) {
                 System.out.println("Error was here:" + e);
             }
+        } else if (tabs.getSelectedIndex() == 2) {
+            refreshTie();
+            bottomPanel.setVisible(true);
+            tieScoreButton.setVisible(true);
+            scoreButton.setVisible(false);
+            startDateButton.setVisible(false);
+            editTeam.setVisible(false);
+            changeMatchDate.setVisible(false);
+            matchButton.setVisible(false);
+            tieButton.setVisible(false);
+        } else if (tabs.getSelectedIndex() == 0) {
+            bottomPanel.setVisible(true);
+            tieScoreButton.setVisible(false);
+            scoreButton.setVisible(true);
+            startDateButton.setVisible(true);
+            editTeam.setVisible(true);
+            changeMatchDate.setVisible(true);
+            matchButton.setVisible(true);
+            tieButton.setVisible(true);
         }
     }//GEN-LAST:event_tabsStateChanged
-
+    public void refreshTie() {
+        try {
+            Connection c1 = DriverManager.getConnection(DBURL);
+            PreparedStatement pstmt = c1.prepareStatement("select * from TieSchedule");
+            ResultSet rs = pstmt.executeQuery();
+            DefaultTableModel yourModel = (DefaultTableModel) rescheduleTable.getModel();
+            yourModel.setRowCount(0);
+            while (rs.next()) {
+                yourModel = (DefaultTableModel) rescheduleTable.getModel();
+                yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam"),
+                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time")});
+            }
+            c1.close();
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println("Error was here:" + e);
+        }
+    }
     private void weekBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_weekBoxActionPerformed
         Dates d1 = new Dates();
         d1.selectDB();
@@ -607,21 +739,84 @@ public class MainPanel extends javax.swing.JPanel {
             s1.storeDate(n1, n2);
             s1.storeDate2(n1, n2);
             for (LocalDate d : Schedule.datesList) {
-                        System.out.println(d);
-                        //setDisable(item.getMonth() == Schedule.datesList.forEach(LocalDate d:Schedule.datesList) );
-                        
-                    }
+                System.out.println(d);
+                //setDisable(item.getMonth() == Schedule.datesList.forEach(LocalDate d:Schedule.datesList) );
+            }
             System.out.println(" line 2");
-            DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");      
+            DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }
     }//GEN-LAST:event_changeMatchDateActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
-        Settings s1 = new Settings(ABDebatePro.ab, true);
-        s1.setVisible(true);
+        if (privLabel.getText().equals("Super Referee")) {
+            Settings s1 = new Settings(ABDebatePro.ab, true, LoginPage.storeUser, "Super");
+            s1.setVisible(true);
+        } else {
+            Settings s1 = new Settings(ABDebatePro.ab, true, LoginPage.storeUser);
+            s1.setVisible(true);
+        }
     }//GEN-LAST:event_settingsButtonActionPerformed
+
+    private void tieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieButtonActionPerformed
+        TieSchedule ts1 = new TieSchedule();
+        ts1.tie();
+    }//GEN-LAST:event_tieButtonActionPerformed
+
+    private void tieScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieScoreButtonActionPerformed
+        if (!(rescheduleTable.getSelectedRow() == -1)) {
+            int scoreOne, scoreTwo;
+            scoreOne = (Integer) rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 3);
+            scoreTwo = (Integer) rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 4);
+            if ((scoreOne == 0 && scoreTwo == 0) || privLabel.getText().equals("Super Referee")) {
+                JTextField scoreField = new JTextField(10);
+                JTextField scoreField2 = new JTextField(10);
+                JPanel myPanel = new JPanel();
+                GridLayout layout = new GridLayout(2, 2, 5, 5);
+                // two j lables for the edit score button
+                myPanel.add(new JLabel("Team " + rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 1) + " Score:"));
+                myPanel.add(scoreField);
+                myPanel.setLayout(layout);
+                myPanel.add(new JLabel("Team " + rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 2) + " Score:"));
+                myPanel.add(scoreField2);
+                myPanel.setLayout(layout);
+                String regex = "[0-9]+";
+                int result = JOptionPane.showConfirmDialog(null, myPanel,
+                        "Edit Score", JOptionPane.OK_CANCEL_OPTION);
+                String score1 = scoreField.getText();
+                String score2 = scoreField2.getText();
+                if (result == JOptionPane.OK_OPTION) {
+                    if (score1.matches(regex) && score2.matches(regex)) {
+                        if (Integer.parseInt(score1) >= 0 && Integer.parseInt(score1) < 11 && Integer.parseInt(score2) >= 0 && Integer.parseInt(score2) < 11) {
+                            try {
+                                TieSchedule tsch = new TieSchedule();
+                                System.out.println(rescheduleTable.getSelectedRow() + 1);
+                                tsch.selectDB(rescheduleTable.getSelectedRow() + 1);
+                                tsch.updateScore(tsch.getMatchNumber(), Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
+                                Teams t1 = new Teams();
+                                t1.CalculateTeamScore();
+                            } catch (Exception e) {
+                                System.out.println(e);
+                            } finally {
+                                refreshTie();
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Score should be between 0 and 10!");
+                            scoreButton.doClick();
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Enter a valid score between 0 and 10!");
+                        scoreButton.doClick();
+                    }
+                }//no else
+            } else {
+                JOptionPane.showMessageDialog(null, "Only Super Referee is authorized to change scores!");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "You need to select a match first!");
+        }    // TODO add your handling code here:
+    }//GEN-LAST:event_tieScoreButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel adminPanel;
@@ -634,6 +829,8 @@ public class MainPanel extends javax.swing.JPanel {
     public static javax.swing.JButton matchButton;
     public static javax.swing.JPanel midPanel;
     public static javax.swing.JLabel privLabel;
+    public static javax.swing.JScrollPane reschedulePane;
+    public static javax.swing.JTable rescheduleTable;
     public javax.swing.JPanel rightSidePanel;
     public static javax.swing.JScrollPane schScrollPane;
     public javax.swing.JTable schTable;
@@ -644,6 +841,8 @@ public class MainPanel extends javax.swing.JPanel {
     public static javax.swing.JTabbedPane tabs;
     public static javax.swing.JScrollPane teamScrollPane;
     public javax.swing.JTable teamTable;
+    public static javax.swing.JButton tieButton;
+    public static javax.swing.JButton tieScoreButton;
     public javax.swing.JLabel topLabel;
     public static javax.swing.JPanel topPanel;
     public javax.swing.JLabel totalGames;

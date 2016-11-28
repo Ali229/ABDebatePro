@@ -131,7 +131,7 @@ public class Logins {
     public void deleteDB(String username) {
         setupDB();
         try {
-            String sql = "delete from Logins where Username = ? " ;
+            String sql = "delete from Logins where Username = ?" ;
             PreparedStatement pstmt = c1.prepareStatement(sql);
             pstmt.setString(1, username);
             System.out.println(sql);

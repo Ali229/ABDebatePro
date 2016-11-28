@@ -1,17 +1,17 @@
 package abdebatepro;
 //========================== Imports =========================================//
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 public class Schedule {
-
     //========================== Properties ==================================//
     public int MatchNumber, FirstTeamScore, SecondTeamScore;
     public String FirstTeam, SecondTeam, Time;
@@ -20,7 +20,6 @@ public class Schedule {
     public Statement stmt;
     ResultSet rs;
     private PreparedStatement pstmt;
-
     //========================== Constructors ================================//        
     public Schedule() {
         MatchNumber = 0;
@@ -31,7 +30,6 @@ public class Schedule {
         MatchDate = null;
         Time = "";
     }
-
     public Schedule(int m, int s1, int s2, String ft, String st, Date d, String t) {
         MatchNumber = m;
         FirstTeamScore = s1;
@@ -41,63 +39,49 @@ public class Schedule {
         MatchDate = d;
         Time = t;
     }
-
     //========================== Behaviors ===================================//
     public void setMatchNumber(int m) {
         MatchNumber = m;
     }
-
     public int getMatchNumber() {
         return MatchNumber;
     }
-
     public void setFirstTeamScore(int s1) {
         FirstTeamScore = s1;
     }
-
     public int getFirstTeamScore() {
         return FirstTeamScore;
     }
-
     public void setSecondTeamScore(int s2) {
         SecondTeamScore = s2;
     }
-
     public int getSecondTeamScore() {
         return SecondTeamScore;
     }
-
     public void setFirstTeam(String ft) {
         FirstTeam = ft;
     }
-
     public String getFirstTeam() {
         return FirstTeam;
     }
-
     public void setSecondTeam(String st) {
         SecondTeam = st;
     }
-
     public String getSeondTeam() {
         return SecondTeam;
     }
-
     public void setMatchDate(Date d) {
         MatchDate = d;
     }
-
     public Date getMatchDate() {
         return MatchDate;
     }
     public void setTime(String t) {
         Time = t;
     }
-
     public String getTime() {
         return Time;
     }
-
     //========================== DB Commands =================================//
     //========================== SetupDB =====================================//
     public void setupDB() {
@@ -109,7 +93,6 @@ public class Schedule {
             System.out.println(e);
         }
     }
-
     //========================== SelectDB ====================================//
     public void selectDB(int m) {
         setupDB();
@@ -130,7 +113,6 @@ public class Schedule {
             System.out.println(e);
         }
     }
-
     //========================== InsertDB ====================================//
     public void insertDB(int m, String ft, String st, int s1, int s2, Date d, String t) {
         MatchNumber = m;
@@ -142,7 +124,6 @@ public class Schedule {
         Time = t;
         setupDB();
         try {
-
             //String sql = "insert into Schedule (MatchNumber, FirstTeam, SecondTeam, FirstTeamScore, SecondTeamScore, MatchDate)  values " + "(" + m + ",'" + ft + "','" + st + "'," + s1 + "," + s2+ ",'" + d  + "')";
             String sql = "insert into Schedule (MatchNumber, FirstTeam, SecondTeam, FirstTeamScore, SecondTeamScore, MatchDate, Time)  values  (?, ?, ?, ?, ?, ?, ?)";
             System.out.println(sql);
@@ -165,7 +146,6 @@ public class Schedule {
             System.out.println(fe);
         }
     }
-
     //========================== UpdateDB ====================================//
     /*public void updateDB(String n, int s) {
         setupDB();
@@ -207,7 +187,6 @@ public class Schedule {
             System.out.println(fe);
         }
     }
-
     //========================== DeleteDB ====================================//
     public void deleteDB() {
         setupDB();
@@ -225,7 +204,6 @@ public class Schedule {
             System.out.println(fe);
         }
     }
-
     //========================== DeleteDB ====================================//
     public void deleteAllDB() {
         setupDB();
@@ -245,7 +223,6 @@ public class Schedule {
     }
     public static ArrayList<LocalDate> datesList = new ArrayList();
     Date d1;
-
     public void storeDate(String n1, String n2) {
         setupDB();
         try {
@@ -254,10 +231,8 @@ public class Schedule {
             pstmt.setString(1, n1);
             pstmt.setString(2, n2);
             ResultSet rs = pstmt.executeQuery();
-
             while (rs.next()) {
                 d1 = rs.getDate("MatchDate");
-
                 datesList.add(d1.toLocalDate());
             }
             c1.close();
@@ -265,7 +240,6 @@ public class Schedule {
             System.out.println(e);
         }
     }
-
     public void storeDate2(String n1, String n2) {
         setupDB();
         try {
@@ -274,10 +248,8 @@ public class Schedule {
             pstmt.setString(1, n2);
             pstmt.setString(2, n1);
             ResultSet rs = pstmt.executeQuery();
-
             while (rs.next()) {
                 d1 = rs.getDate("MatchDate");
-
                 datesList.add(d1.toLocalDate());
             }
             c1.close();
