@@ -137,7 +137,12 @@ public class DatePick extends javax.swing.JDialog {
             System.out.println(e);
         }
     }
-
+    //okay button for set match Date//
+    public void matchDateOkayButton(){
+        Schedule s1 = new Schedule();
+        
+        s1.updateMatchDate(java.sql.Date.valueOf(datePicker.getValue()), 1);
+    }
     public void okayButtonMethod() {
         //Date dTemp = new Date();
         //LocalDate localDate = datePicker.getValue();

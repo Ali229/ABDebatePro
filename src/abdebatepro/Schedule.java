@@ -165,7 +165,28 @@ public class Schedule {
             System.out.println(fe);
         }
     }*/
-    //========================== UpdateDB ====================================//
+    //========================== Update Match Date ===========================//
+    public void updateMatchDate(Date d, int m) {
+        setupDB();
+        try {
+            String sql = "update Schedule set MatchDate = ? WHERE MatchNumber = ?";
+            System.out.println(sql);
+            PreparedStatement pstmt = c1.prepareStatement(sql);
+            pstmt.setDate(1, d);
+            pstmt.setInt(2, m);
+            int z = pstmt.executeUpdate();;
+            if (z == 1) {
+                System.out.println("Update successful");
+            } else {
+                System.out.println("Update Failed");
+            }
+            pstmt.close();
+            c1.close();
+        } catch (Exception fe) {
+            System.out.println(fe);
+        }
+    }
+    //========================== Update Score ================================//
     public void updateScore(int m, int s1, int s2) {
         setupDB();
         try {

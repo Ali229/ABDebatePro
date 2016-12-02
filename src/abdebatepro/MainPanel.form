@@ -42,7 +42,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="leftSidePanel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="808" max="32767" attributes="0"/>
+                  <EmptySpace pref="877" max="32767" attributes="0"/>
                   <Component id="rightSidePanel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -75,7 +75,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Tahoma" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Marietta High School Debate Calender"/>
+                <Property name="text" type="java.lang.String" value="High School Debate Calendar"/>
                 <Property name="alignmentX" type="float" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                   <Connection code="Component.LEFT_ALIGNMENT" type="code"/>
                 </Property>

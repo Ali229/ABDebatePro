@@ -60,8 +60,8 @@ public class MainPanel extends javax.swing.JPanel {
         }
         initComponents();
         setupDB();
-        //bottomPanel.setVisible(false);
-        //settingsButton.setVisible(false);
+        bottomPanel.setVisible(false);
+        settingsButton.setVisible(false);
         tieScoreButton.setVisible(false);
         setCellsCentered();
         changeRef();
@@ -167,7 +167,7 @@ public class MainPanel extends javax.swing.JPanel {
         leftSidePanel.setLayout(new javax.swing.BoxLayout(leftSidePanel, javax.swing.BoxLayout.Y_AXIS));
 
         topLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        topLabel.setText("Marietta High School Debate Calender");
+        topLabel.setText("High School Debate Calendar");
         topLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         leftSidePanel.add(topLabel);
         leftSidePanel.add(Box.createRigidArea(new Dimension(0, 5)));
@@ -226,7 +226,7 @@ public class MainPanel extends javax.swing.JPanel {
             .addGroup(topPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(leftSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 808, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 877, Short.MAX_VALUE)
                 .addComponent(rightSidePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -734,6 +734,7 @@ public class MainPanel extends javax.swing.JPanel {
         if (!(schTable.getSelectedRow() == -1)) {
             String n1 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 1);
             String n2 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 2);
+            //int matchNumber = (int) schTable.getModel().getValueAt(schTable.getSelectedRow(), 2);
             Schedule s1 = new Schedule();
             Schedule.datesList.clear();
             s1.storeDate(n1, n2);
@@ -742,7 +743,6 @@ public class MainPanel extends javax.swing.JPanel {
                 System.out.println(d);
                 //setDisable(item.getMonth() == Schedule.datesList.forEach(LocalDate d:Schedule.datesList) );
             }
-            System.out.println(" line 2");
             DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
