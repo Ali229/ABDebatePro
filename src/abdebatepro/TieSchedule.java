@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package abdebatepro;
+import static abdebatepro.Schedule.datesList;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -11,7 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -213,21 +217,59 @@ public class TieSchedule {
                 String[] timeSlot = new String[noOfElements];
                 int a = 0;
                 int b = 0;
-                for (int x = 0; x < 10; x++) {
+                /*for (int x = 0; x < 10; x++) {
                     for (int i = weekPart[x]; i < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i++) {
                         timeSlot[i] = "9 A.M.";
                     }
                     for (int i = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i < weekPart[x + 1]; i++) {
                         //timeSlot[i] = "3 P.M.";
                     }
+                }*/
+                
+                for (int i = 0; i < noOfElements; i++){
+                    timeSlot[i] = i + 9 + " A.M.";
+                    if (i > 3){
+                        timeSlot[i] = i - 3 + " P.M.";
+                    }
                 }
                 //Date[] weekOfGames = new Date[(count*(count-1))/2];
                 //weekOfGames = (Date[]) a1.getDate(count);
+                Date fd = null;
+                Date d1 = null;
+                setupDB();
+                try {
+                String sql = "select * from Schedule order by MatchNumber";
+                pstmt = c1.prepareStatement(sql);
+                ResultSet rs3 = stmt.executeQuery(sql);
+                while (rs3.next()) {
+                    d1 = rs3.getDate("MatchDate");
+                    System.out.println("rs3 running times " + d1);
+                }
+                c1.close();
+                } catch (Exception e) {
+                System.out.println(e);
+                }
+                String dt = "";
+                Dates d = new Dates();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+                Calendar c = Calendar.getInstance();
+                
+                c.setTime(d1);
+                //for (int i = 0; i < 70; i += 7){
+                    c.add(Calendar.DATE, 7);
+                    System.out.println("after adding "+c.getTime());
+                //}
+                dt = sdf.format(c.getTime());
+                DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
+                java.util.Date utilDate = new java.util.Date();
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                utilDate = sdf.parse(dt);
+
                 deleteTieSchedule();
                 System.out.println(matchupNumber);
                 for (int i = 0; i < matchupNumber; i++) {
                     System.out.println("fdsadsad");
-                    insertTieSchedule(i + 1, matchupAPN[i][1], matchupAPN[i][2], 0, 0, null, timeSlot[i]);
+                    insertTieSchedule(i + 1, matchupAPN[i][1], matchupAPN[i][2], 0, 0, new java.sql.Date(utilDate.getTime()), timeSlot[i]);
                 }
             }
         } catch (Exception e) {
