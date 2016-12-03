@@ -547,11 +547,10 @@ public class MainPanel extends javax.swing.JPanel {
                         if (Integer.parseInt(score1) >= 0 && Integer.parseInt(score1) < 11 && Integer.parseInt(score2) >= 0 && Integer.parseInt(score2) < 11) {
                             try {
                                 Schedule sch = new Schedule();
-                                System.out.println(schTable.getSelectedRow() + 1);
-                                sch.selectDB(schTable.getSelectedRow() + 1);
+                                int matchNumber = Integer.parseInt((String) schTable.getValueAt(schTable.getSelectedRow(), 0));
+                                sch.selectDB(matchNumber);
                                 sch.updateScore(sch.getMatchNumber(), Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
-                                Teams t1 = new Teams();
-                                t1.CalculateTeamScore();
+                                
                             } catch (Exception e) {
                                 System.out.println(e);
                             } finally {
@@ -586,6 +585,8 @@ public class MainPanel extends javax.swing.JPanel {
     private void tabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsStateChanged
         if (tabs.getSelectedIndex() == 1) {
             try {
+                Teams t1 = new Teams();
+                t1.CalculateTeamScore();
                 bottomPanel.setVisible(false);
                 Connection c1 = DriverManager.getConnection(DBURL);
                 PreparedStatement pstmt = c1.prepareStatement("select * from Teams Order by TeamScore DESC");
@@ -656,7 +657,6 @@ public class MainPanel extends javax.swing.JPanel {
                 if (weekBox.getSelectedItem().equals("Week " + (i + 2))) {
                     cal.add(Calendar.DATE, 7 * (i + 1));
                     sqlStatement = "select * from Schedule where MatchDate = #" + dateFormat.format(cal.getTime()) + "# Order by MatchNumber ASC";
-                    System.out.println("The week you selected is : " + weekBox.getSelectedItem());
                     //weekBox.setSelectedIndex(weekBox.getSelectedItem().);
                 }
             }

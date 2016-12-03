@@ -194,7 +194,6 @@ public class Teams {
                 firstScore += rs.getInt(4);
             }
             
-            System.out.println(firstScore);
         c1.close();
         } catch (Exception e) {
                 System.out.println(e);
@@ -212,7 +211,6 @@ public class Teams {
                 secondScore += rs.getInt(5);
             }
             
-            System.out.println(secondScore);
         c1.close();
         } catch (Exception e) {
                 System.out.println(e);
@@ -223,18 +221,17 @@ public class Teams {
         setupDB();
 	try {
             String sql = "update Teams set TeamScore = ? WHERE TeamName = ?";
-            System.out.println(sql);
+            //System.out.println(sql);
             PreparedStatement pstmt = c1.prepareStatement(sql);
             pstmt.setInt(1, s2);
             pstmt.setString(2, m);
-            System.out.println();
             int z = pstmt.executeUpdate();
             if (z == 1) {
-                    System.out.println("Update successful");
+                    //System.out.println("Update successful");
             }
             else 
             {
-                System.out.println("Update Failed");
+                //System.out.println("Update Failed");
             }
             pstmt.close();
             c1.close();
