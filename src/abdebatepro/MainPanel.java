@@ -54,10 +54,20 @@ public class MainPanel extends javax.swing.JPanel {
         }
         renderer = (DefaultTableCellRenderer) schTable.getTableHeader().getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
+
+        DefaultTableCellRenderer rendererTS = new DefaultTableCellRenderer();
+        rendererTS.setHorizontalAlignment(JLabel.CENTER);
+        TableModel tableModelTS = teamTable.getModel();
+        for (int columnIndex = 0; columnIndex < tableModelTS.getColumnCount(); columnIndex++) {
+            teamTable.getColumnModel().getColumn(columnIndex).setCellRenderer(rendererTS);
+        }
+        rendererTS = (DefaultTableCellRenderer) teamTable.getTableHeader().getDefaultRenderer();
+        rendererTS.setHorizontalAlignment(JLabel.CENTER);
+        
         DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer();
         renderer1.setHorizontalAlignment(JLabel.CENTER);
         TableModel tableModel1 = rescheduleTable.getModel();
-        for (int columnIndex = 0; columnIndex < tableModel.getColumnCount(); columnIndex++) {
+        for (int columnIndex = 0; columnIndex < tableModel1.getColumnCount(); columnIndex++) {
             rescheduleTable.getColumnModel().getColumn(columnIndex).setCellRenderer(renderer1);
         }
         renderer1 = (DefaultTableCellRenderer) rescheduleTable.getTableHeader().getDefaultRenderer();
