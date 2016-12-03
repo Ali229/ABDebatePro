@@ -269,6 +269,9 @@
                       <JTableSelectionModel selectionMode="0"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="schTableMouseReleased"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
@@ -334,6 +337,7 @@
                         <Column editable="true" title="Assigned Referee" type="java.lang.Object"/>
                       </Table>
                     </Property>
+                    <Property name="rowHeight" type="int" value="50"/>
                   </Properties>
                 </Component>
               </SubComponents>

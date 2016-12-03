@@ -4,6 +4,8 @@ import static abdebatepro.ABDebatePro.DBURL;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -43,7 +45,7 @@ public class MainPanel extends javax.swing.JPanel {
         //settingsButton.setVisible(false);
         tieScoreButton.setVisible(false);
         setCellsCentered();
-        changeRef();
+        populateChangeRefBox();
     }
     public void setCellsCentered() {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -54,7 +56,6 @@ public class MainPanel extends javax.swing.JPanel {
         }
         renderer = (DefaultTableCellRenderer) schTable.getTableHeader().getDefaultRenderer();
         renderer.setHorizontalAlignment(JLabel.CENTER);
-
         DefaultTableCellRenderer rendererTS = new DefaultTableCellRenderer();
         rendererTS.setHorizontalAlignment(JLabel.CENTER);
         TableModel tableModelTS = teamTable.getModel();
@@ -63,7 +64,6 @@ public class MainPanel extends javax.swing.JPanel {
         }
         rendererTS = (DefaultTableCellRenderer) teamTable.getTableHeader().getDefaultRenderer();
         rendererTS.setHorizontalAlignment(JLabel.CENTER);
-        
         DefaultTableCellRenderer renderer1 = new DefaultTableCellRenderer();
         renderer1.setHorizontalAlignment(JLabel.CENTER);
         TableModel tableModel1 = rescheduleTable.getModel();
@@ -73,10 +73,13 @@ public class MainPanel extends javax.swing.JPanel {
         renderer1 = (DefaultTableCellRenderer) rescheduleTable.getTableHeader().getDefaultRenderer();
         renderer1.setHorizontalAlignment(JLabel.CENTER);
     }
-    public void changeRef() {
+    public void populateChangeRefBox() {
         setupDB();
         TableColumn priv = schTable.getColumnModel().getColumn(7);
         JComboBox comboBox = new JComboBox();
+        comboBox.addActionListener((ActionEvent e) -> {
+            insertAssignedRef();
+        });
         try {
             String sql = "SELECT * from Logins";
             pstmt = c1.prepareStatement(sql);
@@ -91,23 +94,36 @@ public class MainPanel extends javax.swing.JPanel {
         }
         priv.setCellEditor(new DefaultCellEditor(comboBox));
     }
-    public void assignedRef() {
-        setupDB();
-        //TableColumn priv = schTable.getColumnModel().getColumn(7);
-        JComboBox comboBox = new JComboBox();
-        try {
-            String sql = "SELECT * from Logins";
-            pstmt = c1.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                comboBox.addItem(rs.getString("Username"));
+    public void insertAssignedRef() {
+        if (!(schTable.getSelectedRow() == -1)) {
+            //checking row and column
+            String row = Integer.toString(schTable.getSelectedRow());
+            String column = Integer.toString(schTable.getSelectedColumn());
+            System.out.println("Row: " + row + " " + "Column: " + column);
+            //adding
+            int matchNumber = Integer.parseInt((String) schTable.getValueAt(schTable.getSelectedRow(), 0));
+            String assignedRef = (String) schTable.getValueAt(schTable.getSelectedRow(), 7);
+            setupDB();
+            try {
+                String sql = "UPDATE Schedule SET AssignedReferee = ? where MatchNumber = ?";
+                System.out.println(sql);
+                PreparedStatement pstmt = c1.prepareStatement(sql);
+                pstmt.setString(1, assignedRef);
+                pstmt.setInt(2, matchNumber);
+                int z = pstmt.executeUpdate();;
+                if (z == 1) {
+                    System.out.println("Update Ref successful");
+                } else {
+                    System.out.println("Update Ref Failed");
+                }
+                pstmt.close();
+                c1.close();
+                Refresh();
+            } catch (Exception fe) {
+                System.out.println(fe);
             }
-            c1.close();
-            pstmt.close();
-        } catch (Exception e) {
-            System.out.println(e);
+            System.out.println("Match Number: " + matchNumber + "Privilege: " + assignedRef);
         }
-        // priv.setCellEditor(new DefaultCellEditor(comboBox));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -259,6 +275,11 @@ public class MainPanel extends javax.swing.JPanel {
         });
         schTable.setRowHeight(50);
         schTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        schTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                schTableMouseReleased(evt);
+            }
+        });
         schScrollPane.setViewportView(schTable);
 
         tabs.addTab("Schedule", schScrollPane);
@@ -302,6 +323,7 @@ public class MainPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        rescheduleTable.setRowHeight(50);
         reschedulePane.setViewportView(rescheduleTable);
 
         tabs.addTab("Tie Schedule", reschedulePane);
@@ -479,7 +501,7 @@ public class MainPanel extends javax.swing.JPanel {
             while (rs.next()) {
                 yourModel = (DefaultTableModel) schTable.getModel();
                 yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam"),
-                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time")});
+                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time"), rs.getString("AssignedReferee")});
             }
             c1.close();
             pstmt.close();
@@ -535,7 +557,8 @@ public class MainPanel extends javax.swing.JPanel {
             int scoreOne, scoreTwo;
             scoreOne = (Integer) schTable.getValueAt(schTable.getSelectedRow(), 3);
             scoreTwo = (Integer) schTable.getValueAt(schTable.getSelectedRow(), 4);
-            if ((scoreOne == 0 && scoreTwo == 0) || privLabel.getText().equals("Super Referee")) {
+            String assignedRef = (String) schTable.getValueAt(schTable.getSelectedRow(), 7);
+            if ((scoreOne == 0 && scoreTwo == 0 && LoginPage.storeUser.equals(assignedRef)) || privLabel.getText().equals("Super Referee")) {
                 JTextField scoreField = new JTextField(10);
                 JTextField scoreField2 = new JTextField(10);
                 JPanel myPanel = new JPanel();
@@ -560,7 +583,6 @@ public class MainPanel extends javax.swing.JPanel {
                                 int matchNumber = Integer.parseInt((String) schTable.getValueAt(schTable.getSelectedRow(), 0));
                                 sch.selectDB(matchNumber);
                                 sch.updateScore(sch.getMatchNumber(), Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
-                                
                             } catch (Exception e) {
                                 System.out.println(e);
                             } finally {
@@ -576,7 +598,7 @@ public class MainPanel extends javax.swing.JPanel {
                     }
                 }//no else
             } else {
-                JOptionPane.showMessageDialog(null, "Only Super Referee is authorized to change scores!");
+                JOptionPane.showMessageDialog(null, "Not authorized to change scores!");
             }
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
@@ -636,14 +658,14 @@ public class MainPanel extends javax.swing.JPanel {
     public void refreshTie() {
         try {
             Connection c1 = DriverManager.getConnection(DBURL);
-            PreparedStatement pstmt = c1.prepareStatement("select * from TieSchedule");
+            PreparedStatement pstmt = c1.prepareStatement("select * from TieSchedule Order by MatchNumber ASC");
             ResultSet rs = pstmt.executeQuery();
             DefaultTableModel yourModel = (DefaultTableModel) rescheduleTable.getModel();
             yourModel.setRowCount(0);
             while (rs.next()) {
                 yourModel = (DefaultTableModel) rescheduleTable.getModel();
                 yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam"),
-                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time")});
+                    rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate"), rs.getString("Time"), rs.getString("AssignedReferee")});
             }
             c1.close();
             pstmt.close();
@@ -783,6 +805,14 @@ public class MainPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }    // TODO add your handling code here:
     }//GEN-LAST:event_tieScoreButtonActionPerformed
+
+    private void schTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_schTableMouseReleased
+//        if (!(schTable.getSelectedRow() == -1)) {
+//            String row = Integer.toString(schTable.getSelectedRow());
+//            String column = Integer.toString(schTable.getSelectedColumn());
+//            System.out.println("Row: " + row + "Column: " + column);
+//        }
+    }//GEN-LAST:event_schTableMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel adminPanel;
