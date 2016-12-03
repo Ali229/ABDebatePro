@@ -12,8 +12,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.Box;
 import javax.swing.DefaultCellEditor;
@@ -39,29 +37,10 @@ public class MainPanel extends javax.swing.JPanel {
     public int noOfWeeks;
     //========================== Constructor ===================================
     public MainPanel() {
-        try {
-            /*/UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //int greenColorValue = Color.parseColor("#00ff00");
-            UIManager.put("nimbusBase", Color.ORANGE);
-            UIManager.put("text", Color.BLUE);
-            UIManager.put("Panel.background", Color.BLACK);
-            //UIManager.put("nimbusBlueGrey", new Color(255,255,255));//white
-            UIManager.put("control",Color.BLACK);
-            UIManager.put("TextField.background",Color.BLACK);
-            //UIManager.put("textHighlight", Color.ORANGE);//black
-               //UIManager.put( "textBackground", new Color(23,168,235));
-               //UIManager.put("Menu.foreground", Color.RED);*/
-            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            //UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-            //UIManager.setLookAndFeel(new SyntheticaSilverMoonLookAndFeel());
-            //BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.osLookAndFeelDecorated;
-        } catch (Exception e) {
-            System.out.println(e);
-        }
         initComponents();
         setupDB();
-        bottomPanel.setVisible(false);
-        settingsButton.setVisible(false);
+        //bottomPanel.setVisible(false);
+        //settingsButton.setVisible(false);
         tieScoreButton.setVisible(false);
         setCellsCentered();
         changeRef();
@@ -315,7 +294,7 @@ public class MainPanel extends javax.swing.JPanel {
         });
         reschedulePane.setViewportView(rescheduleTable);
 
-        tabs.addTab("Reschedule", reschedulePane);
+        tabs.addTab("Tie Schedule", reschedulePane);
 
         javax.swing.GroupLayout midPanelLayout = new javax.swing.GroupLayout(midPanel);
         midPanel.setLayout(midPanelLayout);
@@ -481,21 +460,6 @@ public class MainPanel extends javax.swing.JPanel {
         }
     }
     public void Refresh() {
-        /*try {
-            Connection c1 = DriverManager.getConnection(DBURL);
-            Statement stmt = c1.createStatement();
-            ResultSet rs = stmt.executeQuery(sqlStatement);
-            DefaultTableModel yourModel = (DefaultTableModel) schTable.getModel();
-            yourModel.setRowCount(0);
-            while (rs.next()) {
-               yourModel = (DefaultTableModel) schTable.getModel();
-               yourModel.addRow(new Object[]{rs.getString("MatchNumber"), rs.getString("FirstTeam"), rs.getString("SecondTeam")
-                       , rs.getInt("FirstTeamScore"), rs.getInt("SecondTeamScore"), rs.getDate("MatchDate")});
-            }
-            c1.close();
-	} catch (Exception e) {
-            System.out.println(e);
-	}*/
         try {
             Connection c1 = DriverManager.getConnection(DBURL);
             PreparedStatement pstmt = c1.prepareStatement(sqlStatement);
@@ -616,13 +580,6 @@ public class MainPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_editTeamActionPerformed
 
     private void startDateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateButtonActionPerformed
-        //Calender c = new Calender(ABDebatePro.ab, true);
-        //c.setVisible(true);
-        //DatePickerSaturdayOnly.frame.setVisible(true);
-        //atePickerSaturdayOnly.runAwesome();
-        //ABDebatePro.ab.add(DatePickerSaturdayOnly.fxPanel);
-        // DatePickerSaturdayOnly.frame.setLocation(500, 250);
-        //DatePickerSaturdayOnly.frame.setAlwaysOnTop(true);
         DatePick dp = new DatePick(ABDebatePro.ab, true);
     }//GEN-LAST:event_startDateButtonActionPerformed
 
@@ -734,19 +691,18 @@ public class MainPanel extends javax.swing.JPanel {
         if (!(schTable.getSelectedRow() == -1)) {
             String n1 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 1);
             String n2 = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 2);
-            //int matchNumber = (int) schTable.getModel().getValueAt(schTable.getSelectedRow(), 2);
+            String mn = (String) schTable.getModel().getValueAt(schTable.getSelectedRow(), 0);
+            Date date = (Date) schTable.getModel().getValueAt(schTable.getSelectedRow(), 5);
+            int matchNumber = Integer.parseInt(mn);
             Schedule s1 = new Schedule();
             Schedule.datesList.clear();
             s1.storeDate(n1, n2);
             s1.storeDate2(n1, n2);
-            for (LocalDate d : Schedule.datesList) {
-                System.out.println(d);
-                //setDisable(item.getMonth() == Schedule.datesList.forEach(LocalDate d:Schedule.datesList) );
-            }
-            DatePick dp = new DatePick(ABDebatePro.ab, true, "Changing Match Date");
+            DatePick dp = new DatePick(ABDebatePro.ab, true, matchNumber, date);
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }
+        Refresh();
     }//GEN-LAST:event_changeMatchDateActionPerformed
 
     private void settingsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsButtonActionPerformed
