@@ -83,7 +83,7 @@ public class DatePick extends javax.swing.JDialog {
                 scene = new Scene(stack, 0, 0);
                 dateLabel = new Text("Please choose match date:");
                 datePicker = new DatePicker();
-                okayButton = new Button("Insert");
+                okayButton = new Button("Update");
                 cancelButton = new Button("Cancel");
                 dateLabel.setTranslateX(-120);
                 dateLabel.setTranslateY(-50);

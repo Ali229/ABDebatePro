@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -46,6 +47,43 @@ public class MainPanel extends javax.swing.JPanel {
         tieScoreButton.setVisible(false);
         setCellsCentered();
         populateChangeRefBox();
+        disableAssignedRef();
+    }
+    public static void disableAssignedRef() {
+        schTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+    }
+    public static void enableAssignedRef() {
+        schTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
     }
     public void setCellsCentered() {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -266,7 +304,7 @@ public class MainPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -829,7 +867,7 @@ public class MainPanel extends javax.swing.JPanel {
     public static javax.swing.JTable rescheduleTable;
     public javax.swing.JPanel rightSidePanel;
     public static javax.swing.JScrollPane schScrollPane;
-    public javax.swing.JTable schTable;
+    public static javax.swing.JTable schTable;
     public static javax.swing.JButton scoreButton;
     public static javax.swing.JButton settingsButton;
     public static javax.swing.JButton startDateButton;

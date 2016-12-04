@@ -211,9 +211,11 @@ public class LoginPage extends javax.swing.JDialog {
             accessGrant = true;
             MainPanel.settingsButton.setVisible(true);
             if (rs.getString("Privilege").equals("Super Referee")) {
+                MainPanel.enableAssignedRef();
                 MainPanel.superPanel.setVisible(true); 
             }
             else if (rs.getString("Privilege").equals("Referee")) {
+                MainPanel.disableAssignedRef();;
                 MainPanel.superPanel.setVisible(false); 
             }
             doClose(RET_OK);
