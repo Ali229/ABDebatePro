@@ -290,12 +290,13 @@ public class Settings extends javax.swing.JDialog {
         int result = JOptionPane.showConfirmDialog(null, myPanel,
                 "Account Management", JOptionPane.OK_CANCEL_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+            
             String nUser = userInput.getText();
             String email = emailInput.getText();
             String temporaryPass = temporaryPasswordInput.getText();
             String confirmPass = PasswordConfirmInput.getText();
             if (temporaryPass.equals(confirmPass)
-                    && !temporaryPass.isEmpty() && !confirmPass.isEmpty()) {
+                    && !temporaryPass.isEmpty() && !confirmPass.isEmpty() && emailInput.getText().contains("@") &&(emailInput.getText().contains(".com") || emailInput.getText().contains(".net"))) {
                 Logins l1 = new Logins();
                 if (superReferee.isSelected()) {
                     title = "Super Referee";
