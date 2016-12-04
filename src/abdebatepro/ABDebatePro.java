@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.sql.Date;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
-
 public class ABDebatePro extends JFrame {
     //========================== Declarations ==================================
     MainPanel mp = new MainPanel();
@@ -13,9 +12,9 @@ public class ABDebatePro extends JFrame {
     public static ABDebatePro ab;
     public static Date startDate;
     //public static final String DBURL = "jdbc:sqlserver://abdebatejava.cf0ik3ogduzd.us-west-2.rds.amazonaws.com:1433;databseName=abdebatejava;user=root;"
-                    //+ "password=abkennesaw123";
+    //+ "password=abkennesaw123";
     //========================== Empty Constructor =============================
-    public ABDebatePro(){
+    public ABDebatePro() {
         setupGUI();
         initialSetup();
     }
@@ -27,7 +26,6 @@ public class ABDebatePro extends JFrame {
         this.setMinimumSize(new Dimension(1280, 720));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Main Page");
-        
         this.setVisible(true);
     }
     //========================== Refresh To Populate ===========================
@@ -40,11 +38,9 @@ public class ABDebatePro extends JFrame {
         try {
             BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.osLookAndFeelDecorated;
             org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e);
         }
-       ab = new ABDebatePro();
-       
+        ab = new ABDebatePro();
     }
 }

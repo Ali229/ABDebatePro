@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package abdebatepro;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
@@ -13,13 +12,11 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-
 /**
  *
  * @author AliNa
  */
 public class AddTeam extends javax.swing.JDialog {
-    
     /**
      * A return status code - returned if Cancel button has been pressed
      */
@@ -28,7 +25,6 @@ public class AddTeam extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-
     /**
      * Creates new form AddTeam
      */
@@ -38,7 +34,6 @@ public class AddTeam extends javax.swing.JDialog {
     public AddTeam(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -50,14 +45,12 @@ public class AddTeam extends javax.swing.JDialog {
             }
         });
     }
-
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */
     public int getReturnStatus() {
         return returnStatus;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -138,11 +131,11 @@ public class AddTeam extends javax.swing.JDialog {
         try {
             Teams t = new Teams();
             if (teamField.getText().length() <= 3) {
-                 JOptionPane.showMessageDialog(null, "Team name must be more than 3 letters!", "Error Name" + "", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Team name must be more than 3 letters!", "Error Name" + "", JOptionPane.INFORMATION_MESSAGE);
             } else {
-               t.insertDB(teamField.getText());
-               doClose(RET_OK); 
-            }      
+                t.insertDB(teamField.getText());
+                doClose(RET_OK);
+            }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Team name must be more than 3 letters and Unique!", "Error Name" + "", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -151,20 +144,17 @@ public class AddTeam extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
-
     /**
      * Closes the dialog
      */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
-    
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -213,6 +203,5 @@ public class AddTeam extends javax.swing.JDialog {
     private javax.swing.JButton okButton;
     private javax.swing.JTextField teamField;
     // End of variables declaration//GEN-END:variables
-
     private int returnStatus = RET_CANCEL;
 }

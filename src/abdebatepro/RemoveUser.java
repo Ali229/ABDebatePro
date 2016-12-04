@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package abdebatepro;
-
-import static abdebatepro.ABDebatePro.DBURL;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -19,7 +17,6 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author AliNa
@@ -33,7 +30,6 @@ public class RemoveUser extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-
     /**
      * Creates new form RemoveUser
      */
@@ -60,7 +56,6 @@ public class RemoveUser extends javax.swing.JDialog {
     public RemoveUser(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -73,14 +68,12 @@ public class RemoveUser extends javax.swing.JDialog {
         });
         refresh();
     }
-
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */
     public int getReturnStatus() {
         return returnStatus;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,7 +166,7 @@ public class RemoveUser extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
-           if (!(removeTable.getSelectedRow() == -1)) {
+        if (!(removeTable.getSelectedRow() == -1)) {
             String username = (String) removeTable.getModel().getValueAt(removeTable.getSelectedRow(), 0);
             Logins l1 = new Logins();
             l1.deleteDB(username);
@@ -182,20 +175,17 @@ public class RemoveUser extends javax.swing.JDialog {
         }
         refresh();
     }//GEN-LAST:event_removeButtonActionPerformed
-
     /**
      * Closes the dialog
      */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
-    
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -244,6 +234,5 @@ public class RemoveUser extends javax.swing.JDialog {
     private javax.swing.JButton removeButton;
     private javax.swing.JTable removeTable;
     // End of variables declaration//GEN-END:variables
-
     private int returnStatus = RET_CANCEL;
 }

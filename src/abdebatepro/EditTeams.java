@@ -4,10 +4,7 @@
  * and open the template in the editor.
  */
 package abdebatepro;
-
 import static abdebatepro.ABDebatePro.DBURL;
-import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -18,15 +15,10 @@ import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
 /**
  *
  * @author AliNa
@@ -45,18 +37,16 @@ public class EditTeams extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-
     /**
      * Creates new form EditTeams
      */
-    public EditTeams(){
+    public EditTeams() {
         initComponents();
         populateTeams();
     }
     public EditTeams(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -74,21 +64,21 @@ public class EditTeams extends javax.swing.JDialog {
         this.setTitle("Setup Teams");
     }
     public void totalTeams() {
-    try {
+        try {
             Connection c1 = DriverManager.getConnection(DBURL);
             Statement stmt = c1.createStatement();
             ResultSet rs = stmt.executeQuery("select Count(ID) AS TotalNumber from Teams");
             while (rs.next()) {
-               number = rs.getInt("TotalNumber");
-               totalTeams.setText("Total Teams: " + Integer.toString(number));
+                number = rs.getInt("TotalNumber");
+                totalTeams.setText("Total Teams: " + Integer.toString(number));
             }
             c1.close();
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
-    public void populateTeams(){
-    try {
+    public void populateTeams() {
+        try {
             //Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             Connection c1 = DriverManager.getConnection(DBURL);
             Statement stmt = c1.createStatement();
@@ -97,13 +87,13 @@ public class EditTeams extends javax.swing.JDialog {
             DefaultTableModel yourModel = (DefaultTableModel) teamTable.getModel();
             yourModel.setRowCount(0);
             while (rs.next()) {
-              yourModel.addRow(new Object[]{rs.getInt("ID"), rs.getString("TeamName"), rs.getInt("TeamScore")});
+                yourModel.addRow(new Object[]{rs.getInt("ID"), rs.getString("TeamName"), rs.getInt("TeamScore")});
             }
             c1.close();
-	} catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
-    totalTeams();
+        }
+        totalTeams();
     }
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
@@ -111,7 +101,6 @@ public class EditTeams extends javax.swing.JDialog {
     public int getReturnStatus() {
         return returnStatus;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -266,7 +255,6 @@ public class EditTeams extends javax.swing.JDialog {
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
-
     /**
      * Closes the dialog
      */
@@ -288,17 +276,15 @@ public class EditTeams extends javax.swing.JDialog {
         Teams t = new Teams();
         Object o = teamTable.getValueAt(teamTable.getSelectedRow(), 0);
         System.out.println(o);
-        t.selectDB((Integer) o); 
+        t.selectDB((Integer) o);
         t.deleteDB();
         populateTeams();
     }//GEN-LAST:event_deleteButtonActionPerformed
-    
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -351,6 +337,5 @@ public class EditTeams extends javax.swing.JDialog {
     private javax.swing.JLabel totalTeams;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
-
     private int returnStatus = RET_CANCEL;
 }

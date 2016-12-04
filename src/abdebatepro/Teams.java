@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-
 public class Teams {
     //========================== Properties ==================================//
     public int ID, TeamScore;
@@ -19,26 +18,35 @@ public class Teams {
     public ArrayList<String> allTeams = new ArrayList<String>();
     public int firstScore, secondScore, numberOfTeam;  //Used to calculate score
     //========================== Constructors ================================//        
-    public Teams(){
+    public Teams() {
         ID = 0;
         TeamScore = 0;
         TeamName = "";
     }
-    
-    public Teams(int i, int s, String n){
+    public Teams(int i, int s, String n) {
         ID = i;
         TeamScore = s;
         TeamName = n;
     }
     //========================== Behaviors ===================================//
-    public void setID (int i) {ID = i; }
-    public int getID() { return ID; }
-    
-    public void TeamName (String n) {TeamName = n; }
-    public String getTeamName() { return TeamName; }
-    
-    public void setTeamScore (int s) {TeamScore = s; }
-    public int getTeamScore() { return TeamScore; }
+    public void setID(int i) {
+        ID = i;
+    }
+    public int getID() {
+        return ID;
+    }
+    public void TeamName(String n) {
+        TeamName = n;
+    }
+    public String getTeamName() {
+        return TeamName;
+    }
+    public void setTeamScore(int s) {
+        TeamScore = s;
+    }
+    public int getTeamScore() {
+        return TeamScore;
+    }
     //========================== DB Commands =================================//
     //========================== SetupDB =====================================//
     public void setupDB() {
@@ -46,41 +54,40 @@ public class Teams {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
             stmt = c1.createStatement();
-	}
-	catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
     //========================== SelectDB ====================================//
     public void selectDB(int d) {
         setupDB();
-	try {	
+        try {
             String sql = "select * from Teams where id = " + d;
             System.out.println(sql);
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-		ID = rs.getInt(1);
+                ID = rs.getInt(1);
                 TeamName = rs.getString(2);
-		TeamScore = rs.getInt(3);
+                TeamScore = rs.getInt(3);
             }
-	c1.close();
-	} catch (Exception e) {
-                System.out.println(e);
-	}
+            c1.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
     //========================== SelectDB ====================================//
     public void selectAllDB() {
         setupDB();
-        try {	
+        try {
             ResultSet rs = stmt.executeQuery("select * from Teams");
             while (rs.next()) {
                 ID = rs.getInt(1);
                 TeamName = rs.getString(2);
                 allTeams.add(TeamName);
             }
-        c1.close();
+            c1.close();
         } catch (Exception e) {
-                System.out.println(e);
+            System.out.println(e);
         }
     }
     //========================== InsertDB ====================================//
@@ -95,31 +102,29 @@ public class Teams {
             int z = pstmt.executeUpdate();
             if (z == 1) {
                 System.out.println("Insert successful");
-            }
-            else {
+            } else {
                 System.out.println("Insert Failed");
             }
             c1.close();
             pstmt.close();
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Team name must be Unique!", "Error Name" + "", JOptionPane.INFORMATION_MESSAGE);
-            }           
-            catch (Exception e) {
-             System.out.println(e);
-            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Team name must be Unique!", "Error Name" + "", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
     //========================== UpdateDB ====================================//
     public void updateDB(int i, String n) {
         setupDB();
-	try {
+        try {
             String sql = "update Teams set TeamName = '" + n + "' where ID = " + i;
             System.out.println(sql);
             int z = stmt.executeUpdate(sql);
             if (z == 1) {
-                    System.out.println("Update successful");
+                System.out.println("Update successful");
+            } else {
+                System.out.println("Update Failed");
             }
-            else System.out.println("Update Failed");
             c1.close();
         } catch (Exception fe) {
             System.out.println(fe);
@@ -134,9 +139,10 @@ public class Teams {
             int n = stmt.executeUpdate(sql);
             if (n == 1) {
                 System.out.println("Delete successful");
+            } else {
+                System.out.println("Delete Failed");
             }
-            else System.out.println("Delete Failed");
-            c1.close();	
+            c1.close();
         } catch (Exception fe) {
             System.out.println(fe);
         }
@@ -150,9 +156,10 @@ public class Teams {
             int n = stmt.executeUpdate(sql);
             if (n == 1) {
                 System.out.println("Delete successful");
+            } else {
+                System.out.println("Delete Failed");
             }
-            else System.out.println("Delete Failed");
-            c1.close();	
+            c1.close();
         } catch (Exception fe) {
             System.out.println(fe);
         }
@@ -165,7 +172,7 @@ public class Teams {
             String sql = "SELECT count(*) AS total from Teams";
             PreparedStatement pstmt = c1.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            while( rs.next() ){
+            while (rs.next()) {
                 numberOfTeam = rs.getInt("total");
             }
             c1.close();
@@ -173,9 +180,8 @@ public class Teams {
             System.out.println(e);
         }
         selectAllDB();
-        for(int i = 0; i < numberOfTeam; i++){
+        for (int i = 0; i < numberOfTeam; i++) {
             selectFirstScore(allTeams.get(i));
-            
             selectSecondScore(allTeams.get(i));
             updateTeamScore(allTeams.get(i), (firstScore + secondScore));
             firstScore = 0;
@@ -185,41 +191,37 @@ public class Teams {
     //========================== Step 2 ======================================//
     public void selectFirstScore(String m) {
         setupDB();
-        try {	
+        try {
             String sql = "select * from Schedule where FirstTeam = '" + m + "'";
             ResultSet rs = stmt.executeQuery(sql);
-            
             while (rs.next()) {
                 ID = rs.getInt(1);
                 firstScore += rs.getInt(4);
             }
-            
-        c1.close();
+            c1.close();
         } catch (Exception e) {
-                System.out.println(e);
+            System.out.println(e);
         }
     }
     //========================== Step 3 ======================================//
     public void selectSecondScore(String m) {
         setupDB();
-        try {	
+        try {
             String sql = "select * from Schedule where SecondTeam = '" + m + "'";
             ResultSet rs = stmt.executeQuery(sql);
-            
             while (rs.next()) {
                 ID = rs.getInt(1);
                 secondScore += rs.getInt(5);
             }
-            
-        c1.close();
+            c1.close();
         } catch (Exception e) {
-                System.out.println(e);
+            System.out.println(e);
         }
     }
     //========================== Step 4 ======================================//
     public void updateTeamScore(String m, int s2) {
         setupDB();
-	try {
+        try {
             String sql = "update Teams set TeamScore = ? WHERE TeamName = ?";
             //System.out.println(sql);
             PreparedStatement pstmt = c1.prepareStatement(sql);
@@ -227,10 +229,8 @@ public class Teams {
             pstmt.setString(2, m);
             int z = pstmt.executeUpdate();
             if (z == 1) {
-                    //System.out.println("Update successful");
-            }
-            else 
-            {
+                //System.out.println("Update successful");
+            } else {
                 //System.out.println("Update Failed");
             }
             pstmt.close();

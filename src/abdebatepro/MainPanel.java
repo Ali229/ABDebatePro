@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -21,7 +20,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -35,7 +33,6 @@ public class MainPanel extends javax.swing.JPanel {
     private PreparedStatement pstmt;
     ResultSet rs;
     String someUser, somePass;
-    public static String storedPriv;
     public String sqlStatement = "select * from Schedule Order by MatchNumber ASC";
     Algorithm a = new Algorithm();
     public int noOfWeeks;
@@ -50,7 +47,7 @@ public class MainPanel extends javax.swing.JPanel {
         populateChangeRefBox();
     }
     public void disableAssignedRef() {
-         schTable.setModel(new javax.swing.table.DefaultTableModel(
+        schTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
                 new String[]{
                     "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"

@@ -4,24 +4,13 @@
  * and open the template in the editor.
  */
 package abdebatepro;
-
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Panel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
-
 /**
  *
  * @author AliNa
@@ -69,12 +58,10 @@ public class LoginPage extends javax.swing.JDialog {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
             stmt = c1.createStatement();
-	}
-	catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -189,10 +176,10 @@ public class LoginPage extends javax.swing.JDialog {
         dispose();
     }
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
-         String user = userTextField.getText();
-         String pass = passTextField.getText();
-         setupDB();
-         try {
+        String user = userTextField.getText();
+        String pass = passTextField.getText();
+        setupDB();
+        try {
             String sql = "SELECT * FROM Logins where Username=? and Password=?";
             //String sql = "SELECT Username=? and Password=? COLLATE Latin1_General_CS_AS FROM Logins";
             PreparedStatement pstmt = c1.prepareStatement(sql);
@@ -200,40 +187,35 @@ public class LoginPage extends javax.swing.JDialog {
             pstmt.setString(2, pass);
             System.out.println(sql);
             rs = pstmt.executeQuery();
-        if (rs.next()) {
-            //MainPanel.welcomeArea.setText("Welcome " + rs.getString("Username") + "!" +  System.getProperty("line.separator") + rs.getString("Privilege"));
-            MainPanel.loginLabel.setText("Welcome " + rs.getString("Username") + "!");
-            MainPanel.privLabel.setText(rs.getString("Privilege"));
-            MainPanel.bottomPanel.setVisible(true);   
-            MainPanel.loginButton.setText("Logout");
-            storeUser = rs.getString("Username");
-            storePass = rs.getString("Password");
-            accessGrant = true;
-            MainPanel.settingsButton.setVisible(true);
-            if (rs.getString("Privilege").equals("Super Referee")) {
-                MainPanel.storedPriv = "Super Referee";
-                MainPanel.superPanel.setVisible(true); 
+            if (rs.next()) {
+                //MainPanel.welcomeArea.setText("Welcome " + rs.getString("Username") + "!" +  System.getProperty("line.separator") + rs.getString("Privilege"));
+                MainPanel.loginLabel.setText("Welcome " + rs.getString("Username") + "!");
+                MainPanel.privLabel.setText(rs.getString("Privilege"));
+                MainPanel.bottomPanel.setVisible(true);
+                MainPanel.loginButton.setText("Logout");
+                storeUser = rs.getString("Username");
+                storePass = rs.getString("Password");
+                accessGrant = true;
+                MainPanel.settingsButton.setVisible(true);
+                if (rs.getString("Privilege").equals("Super Referee")) {
+                    MainPanel.superPanel.setVisible(true);
+                } else if (rs.getString("Privilege").equals("Referee")) {
+                    MainPanel.superPanel.setVisible(false);
+                }
+                doClose(RET_OK);
+            } else {
+                JOptionPane.showMessageDialog(null, "Login Incorrect");
+                doClose(RET_OK);
+                if (!storeUser.isEmpty() == false) {
+                    MainPanel.loginButton.doClick();
+                }
+                accessGrant = false;
             }
-            else if (rs.getString("Privilege").equals("Referee")) {
-                MainPanel.storedPriv = "Referee";
-                MainPanel.superPanel.setVisible(false); 
-            }
-            doClose(RET_OK);
-            
-        } else {
-               JOptionPane.showMessageDialog(null, "Login Incorrect");
-               doClose(RET_OK);
-               if (!storeUser.isEmpty() == false) {
-                MainPanel.loginButton.doClick();
-               }
-               accessGrant = false;
-        }  
-          pstmt.close();
-          c1.close();
-          }      
-         catch (Exception e) {
+            pstmt.close();
+            c1.close();
+        } catch (Exception e) {
             System.out.println(e);
-          }
+        }
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
@@ -252,7 +234,6 @@ public class LoginPage extends javax.swing.JDialog {
         ForgotPassword fp = new ForgotPassword(ABDebatePro.ab, true);
         fp.setVisible(true);
     }//GEN-LAST:event_forgetLabelMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -293,7 +274,6 @@ public class LoginPage extends javax.swing.JDialog {
                 dialog.setVisible(true);
             }
         });
-        
     }
     public void checkLoginStatus() {
         if (storeUser.isEmpty() == false) {

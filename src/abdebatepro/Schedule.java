@@ -5,12 +5,9 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 public class Schedule {
     //========================== Properties ==================================//
     public int MatchNumber, FirstTeamScore, SecondTeamScore;
@@ -278,7 +275,6 @@ public class Schedule {
             System.out.println(e);
         }
     }
-
     //========================== Main ========================================//
     public static void main(String[] args) {
         Schedule s1 = new Schedule();

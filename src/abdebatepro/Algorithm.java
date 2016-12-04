@@ -130,9 +130,6 @@ public class Algorithm {
                     }
                     
             }*/
-            
-        
-            
             for (int i = weekPart[x]; i < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i++) {
                 timeSlot[i] = "9 A.M.";
                 for (int j = 1; j < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x] - i; j++) {
@@ -149,7 +146,7 @@ public class Algorithm {
                         for (int j = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j < weekPart[x + 1]; j++) {
                             if (matchupAPN[i][2].equals(matchupAPN[j][1]) || matchupAPN[i][2].equals(matchupAPN[j][2])) {
                                 timeSlot[j] = "9 A.M.";
-                                repeatMatchupNumber1 = j; 
+                                repeatMatchupNumber1 = j;
                             }
                         }
                     }
@@ -157,7 +154,7 @@ public class Algorithm {
                         for (int j = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j < weekPart[x + 1]; j++) {
                             if (matchupAPN[i][1].equals(matchupAPN[j][1]) || matchupAPN[i][1].equals(matchupAPN[j][2])) {
                                 timeSlot[j] = "9 A.M.";
-                                repeatMatchupNumber2 = j; 
+                                repeatMatchupNumber2 = j;
                             }
                         }
                     }
@@ -167,8 +164,8 @@ public class Algorithm {
             }
             for (int i = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i < weekPart[x + 1]; i++) {
                 timeSlot[i] = "3 P.M.";
-                if (i == repeatMatchupNumber1 || i == repeatMatchupNumber2){
-                    timeSlot[i] = "9 A.M."; 
+                if (i == repeatMatchupNumber1 || i == repeatMatchupNumber2) {
+                    timeSlot[i] = "9 A.M.";
                 }
                 for (int j = 1; j < weekPart[x + 1] - i; j++) {
                     if (matchupAPN[i][1].equals(matchupAPN[i + j][1]) || matchupAPN[i][1].equals(matchupAPN[i + j][2])) {

@@ -5,14 +5,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-
 public class Dates {
     //========================== Properties ==================================//
     public Date sDate;
@@ -20,21 +12,24 @@ public class Dates {
     private PreparedStatement pstmt;
     private ResultSet rs;
     //========================== Constructors ================================//        
-    public Dates(){
+    public Dates() {
     }
     //========================== Behaviors ===================================//
-    public void setsDate (Date d) {sDate = d; }
-    public Date getsDate() { return sDate; }
+    public void setsDate(Date d) {
+        sDate = d;
+    }
+    public Date getsDate() {
+        return sDate;
+    }
     //========================== DB Commands =================================//
     //========================== SetupDB =====================================//
     public void setupDB() {
         try {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
-	}
-	catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
     //========================== SelectDB ====================================//
     public void selectDB() {
@@ -48,9 +43,8 @@ public class Dates {
             }
             c1.close();
             pstmt.close();
-            }   catch (Exception e) {
-             System.out.println(e);
-            
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
     //========================== InsertDB ====================================//
@@ -62,25 +56,22 @@ public class Dates {
             System.out.println(sql + d);
             pstmt = c1.prepareStatement(sql);
             pstmt.setDate(1, d);
-            
             int z = pstmt.executeUpdate();
             if (z == 1) {
                 System.out.println("Insert successful");
-            }
-            else {
+            } else {
                 System.out.println("Insert Failed");
             }
             c1.close();
             pstmt.close();
-            }   catch (Exception e) {
-             System.out.println(e);
-            
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
     //========================== UpdateDB ====================================//
     public void updateDB(Date d) {
         setupDB();
-	try {
+        try {
             //String sql = "UPDATE Dates SET StartDate = ? LIMIT 1";
             //String sql = "UPDATE Dates SET MAX(StartDate) = ?";
             String sql = "UPDATE Dates SET StartDate = ? where StartDate = (SELECT TOP 1 StartDate  FROM Dates)";
@@ -89,10 +80,8 @@ public class Dates {
             pstmt.setDate(1, d);
             int z = pstmt.executeUpdate();;
             if (z == 1) {
-                    System.out.println("Update successful");
-            }
-            else 
-            {
+                System.out.println("Update successful");
+            } else {
                 System.out.println("Update Failed");
             }
             pstmt.close();

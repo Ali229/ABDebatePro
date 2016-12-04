@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 package abdebatepro;
-
-import static abdebatepro.LoginPage.RET_OK;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -19,7 +17,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-
 /**
  *
  * @author AliNa
@@ -36,7 +33,6 @@ public class ForgotPassword extends javax.swing.JDialog {
      * A return status code - returned if OK button has been pressed
      */
     public static final int RET_OK = 1;
-
     /**
      * Creates new form ForgotPassword
      */
@@ -46,7 +42,6 @@ public class ForgotPassword extends javax.swing.JDialog {
     public ForgotPassword(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         // Close the dialog when Esc is pressed
         String cancelName = "cancel";
         InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
@@ -59,14 +54,12 @@ public class ForgotPassword extends javax.swing.JDialog {
         });
         sendButton.requestFocusInWindow();
     }
-
     /**
      * @return the return status of this dialog - one of RET_OK or RET_CANCEL
      */
     public int getReturnStatus() {
         return returnStatus;
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,43 +137,40 @@ public class ForgotPassword extends javax.swing.JDialog {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
             stmt = c1.createStatement();
-	}
-	catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
-	}
+        }
     }
     private void sendButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sendButtonActionPerformed
-         String email = emailTextField.getText();
-         setupDB();
-         try {
+        String email = emailTextField.getText();
+        setupDB();
+        try {
             String sql = "SELECT * FROM Logins where Email=?";
             PreparedStatement pstmt = c1.prepareStatement(sql);
             pstmt.setString(1, email);
             System.out.println(sql + "And your email is: " + email);
             rs = pstmt.executeQuery();
-        if (rs.next()) {
-            String username = rs.getString("Username");
-            String password = rs.getString("Password");
-            System.out.println("SELECT * FROM Logins where Email= " + email);
-            Email em = new Email(email, username, password);
-            doClose(RET_OK);
-            JOptionPane.showMessageDialog(null, "Your password is sent!");
-        } else {
-               JOptionPane.showMessageDialog(null, "The email you entered does not exist!");
-               doClose(RET_OK);
-        }  
-          pstmt.close();
-          c1.close();
-          }      
-         catch (Exception e) {
+            if (rs.next()) {
+                String username = rs.getString("Username");
+                String password = rs.getString("Password");
+                System.out.println("SELECT * FROM Logins where Email= " + email);
+                Email em = new Email(email, username, password);
+                doClose(RET_OK);
+                JOptionPane.showMessageDialog(null, "Your password is sent!");
+            } else {
+                JOptionPane.showMessageDialog(null, "The email you entered does not exist!");
+                doClose(RET_OK);
+            }
+            pstmt.close();
+            c1.close();
+        } catch (Exception e) {
             System.out.println(e);
-          }
+        }
     }//GEN-LAST:event_sendButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
-
     /**
      * Closes the dialog
      */
@@ -191,13 +181,11 @@ public class ForgotPassword extends javax.swing.JDialog {
     private void emailTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailTextFieldFocusGained
         emailTextField.setText("");
     }//GEN-LAST:event_emailTextFieldFocusGained
-    
     private void doClose(int retStatus) {
         returnStatus = retStatus;
         setVisible(false);
         dispose();
     }
-
     /**
      * @param args the command line arguments
      */
@@ -245,6 +233,5 @@ public class ForgotPassword extends javax.swing.JDialog {
     public javax.swing.JTextField emailTextField;
     private javax.swing.JButton sendButton;
     // End of variables declaration//GEN-END:variables
-
     private int returnStatus = RET_CANCEL;
 }
