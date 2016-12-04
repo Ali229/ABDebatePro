@@ -35,6 +35,7 @@ public class MainPanel extends javax.swing.JPanel {
     private PreparedStatement pstmt;
     ResultSet rs;
     String someUser, somePass;
+    public static String storedPriv;
     public String sqlStatement = "select * from Schedule Order by MatchNumber ASC";
     Algorithm a = new Algorithm();
     public int noOfWeeks;
@@ -47,43 +48,42 @@ public class MainPanel extends javax.swing.JPanel {
         tieScoreButton.setVisible(false);
         setCellsCentered();
         populateChangeRefBox();
-        disableAssignedRef();
     }
-    public static void disableAssignedRef() {
-        schTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
-            }
+    public void disableAssignedRef() {
+         schTable.setModel(new javax.swing.table.DefaultTableModel(
+                new Object[][]{},
+                new String[]{
+                    "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+            boolean[] canEdit = new boolean[]{
+                false, false, false, false, false, false, false, false
             };
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
+        Refresh();
+        populateChangeRefBox();
+        setCellsCentered();
     }
-    public static void enableAssignedRef() {
+    public void enableAssignedRef() {
         schTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
-            }
+                new Object[][]{},
+                new String[]{
+                    "Match Number", "First Team", "Second Team", "First Team Score", "Second Team Score", "Date", "Time", "Assigned Referee"
+                }
         ) {
-            boolean[] canEdit = new boolean [] {
+            boolean[] canEdit = new boolean[]{
                 false, false, false, false, false, false, false, true
             };
-
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
+        Refresh();
+        populateChangeRefBox();
+        setCellsCentered();
     }
     public void setCellsCentered() {
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -119,7 +119,7 @@ public class MainPanel extends javax.swing.JPanel {
             insertAssignedRef();
         });
         try {
-            String sql = "SELECT * from Logins";
+            String sql = "SELECT * from Logins where Privilege = 'Referee'";
             pstmt = c1.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -746,6 +746,11 @@ public class MainPanel extends javax.swing.JPanel {
         if (loginButton.getText().equals("Admin Login")) {
             LoginPage lp = new LoginPage(ABDebatePro.ab, true);
             lp.setVisible(true);
+            if (privLabel.getText().equals("Super Referee")) {
+                enableAssignedRef();
+            } else if (privLabel.getText().equals("Referee")) {
+                disableAssignedRef();
+            }
         } else if (loginButton.getText().equals("Logout")) {
             bottomPanel.setVisible(false);
             loginButton.setText("Admin Login");
@@ -754,6 +759,7 @@ public class MainPanel extends javax.swing.JPanel {
             LoginPage.storeUser = "";
             LoginPage.storePass = "";
             settingsButton.setVisible(false);
+            disableAssignedRef();
         }
     }//GEN-LAST:event_loginButtonActionPerformed
 
