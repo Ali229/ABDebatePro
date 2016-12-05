@@ -98,14 +98,15 @@ public class Settings extends javax.swing.JDialog {
             }
         });
 
-        addUser.setText("Add User");
+        addUser.setText("Add Referee");
+        addUser.setActionCommand("Add Referee");
         addUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addUserActionPerformed(evt);
             }
         });
 
-        removeUser.setText("Remove User");
+        removeUser.setText("Remove Referee");
         removeUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeUserActionPerformed(evt);
@@ -295,21 +296,26 @@ public class Settings extends javax.swing.JDialog {
             String temporaryPass = temporaryPasswordInput.getText();
             String confirmPass = PasswordConfirmInput.getText();
             if (temporaryPass.equals(confirmPass)
-                    && !temporaryPass.isEmpty() && !confirmPass.isEmpty() && emailInput.getText().contains("@") && (emailInput.getText().contains(".com") || emailInput.getText().contains(".net"))) {
-                Logins l1 = new Logins();
-                if (superReferee.isSelected()) {
-                    title = "Super Referee";
-                } else if (referee.isSelected()) {
-                    title = "Referee";
+                    && !temporaryPass.isEmpty() && !confirmPass.isEmpty()) {
+                if (emailInput.getText().contains("@") && (emailInput.getText().contains(".com") || emailInput.getText().contains(".net")))  {
+                    Logins l1 = new Logins();
+                    if (superReferee.isSelected()) {
+                        title = "Super Referee";
+                    } else if (referee.isSelected()) {
+                        title = "Referee";
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Referee status is not selected");
+                    }
+                    if (superReferee.isSelected() || referee.isSelected()) {
+                        l1.insertDB(nUser, confirmPass, title, email);
+                        l1.selectDB();
+                        JOptionPane.showMessageDialog(null, "Insert Successfull");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Insert Failed");
+                        addUser.doClick();
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Referee status is not selected");
-                }
-                if (superReferee.isSelected() || referee.isSelected()) {
-                    l1.insertDB(nUser, confirmPass, title, email);
-                    l1.selectDB();
-                    JOptionPane.showMessageDialog(null, "Insert Successfull");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Insert Failed");
+                    JOptionPane.showMessageDialog(null, "Please provide a valid email address!");
                     addUser.doClick();
                 }
             } else {

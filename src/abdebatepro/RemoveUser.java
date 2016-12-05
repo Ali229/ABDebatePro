@@ -124,6 +124,7 @@ public class RemoveUser extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        removeTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(removeTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

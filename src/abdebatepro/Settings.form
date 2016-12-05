@@ -129,7 +129,8 @@
             </Component>
             <Component class="javax.swing.JButton" name="addUser">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Add User"/>
+                <Property name="text" type="java.lang.String" value="Add Referee"/>
+                <Property name="actionCommand" type="java.lang.String" value="Add Referee"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addUserActionPerformed"/>
@@ -137,7 +138,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="removeUser">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Remove User"/>
+                <Property name="text" type="java.lang.String" value="Remove Referee"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeUserActionPerformed"/>

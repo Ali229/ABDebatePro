@@ -310,11 +310,6 @@ public class MainPanel extends javax.swing.JPanel {
         });
         schTable.setRowHeight(50);
         schTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        schTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                schTableMouseReleased(evt);
-            }
-        });
         schScrollPane.setViewportView(schTable);
 
         tabs.addTab("Schedule", schScrollPane);
@@ -670,6 +665,7 @@ public class MainPanel extends javax.swing.JPanel {
                 System.out.println("Error was here:" + e);
             }
         } else if (tabs.getSelectedIndex() == 2) {
+            
             refreshTie();
             bottomPanel.setVisible(true);
             tieScoreButton.setVisible(true);
@@ -728,13 +724,6 @@ public class MainPanel extends javax.swing.JPanel {
                 }
             }
         }
-        /*else if(weekBox.getSelectedItem().equals("Week 2")) {
-            cal.add(Calendar.DATE, 7);
-            sqlStatement = "select * from Schedule where MatchDate = #" + dateFormat.format(cal.getTime()) + "# Order by MatchNumber ASC";
-        } else if(weekBox.getSelectedItem().equals("Week 3")) {
-            cal.add(Calendar.DATE, 14);
-            sqlStatement = "select * from Schedule where MatchDate = #" + dateFormat.format(cal.getTime()) + "# Order by MatchNumber ASC";
-        }*/
         System.out.println("You chose: " + weekBox.getSelectedItem());
         Refresh();
     }//GEN-LAST:event_weekBoxActionPerformed
@@ -789,8 +778,26 @@ public class MainPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_settingsButtonActionPerformed
 
     private void tieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieButtonActionPerformed
+        try {
+                Teams t1 = new Teams();
+                t1.CalculateTeamScore();
+                Connection c1 = DriverManager.getConnection(DBURL);
+                PreparedStatement pstmt = c1.prepareStatement("select * from Teams Order by TeamScore DESC");
+                ResultSet rs = pstmt.executeQuery();
+                DefaultTableModel yourModel = (DefaultTableModel) teamTable.getModel();
+                yourModel.setRowCount(0);
+                while (rs.next()) {
+                    yourModel = (DefaultTableModel) teamTable.getModel();
+                    yourModel.addRow(new Object[]{rs.getString("TeamName"), rs.getInt("TeamScore")});
+                }
+                c1.close();
+                pstmt.close();
+            } catch (Exception e) {
+                System.out.println("Error was here:" + e);
+            }
         TieSchedule ts1 = new TieSchedule();
         ts1.tie();
+        
     }//GEN-LAST:event_tieButtonActionPerformed
 
     private void tieScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieScoreButtonActionPerformed
@@ -846,14 +853,6 @@ public class MainPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
         }    // TODO add your handling code here:
     }//GEN-LAST:event_tieScoreButtonActionPerformed
-
-    private void schTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_schTableMouseReleased
-//        if (!(schTable.getSelectedRow() == -1)) {
-//            String row = Integer.toString(schTable.getSelectedRow());
-//            String column = Integer.toString(schTable.getSelectedColumn());
-//            System.out.println("Row: " + row + "Column: " + column);
-//        }
-    }//GEN-LAST:event_schTableMouseReleased
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel adminPanel;

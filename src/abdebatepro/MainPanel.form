@@ -269,9 +269,6 @@
                       <JTableSelectionModel selectionMode="0"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="schTableMouseReleased"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>
