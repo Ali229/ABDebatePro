@@ -211,6 +211,37 @@ public class Schedule {
             System.out.println(fe);
         }
     }
+    //========================== DeleteTeam from Schedule ====================//
+    public void deleteTeam(String teamName) {
+        setupDB();
+        try {
+            String sql = "delete from Schedule where firstTeam = '" + teamName + "'";
+            System.out.println(sql);
+            int n = stmt.executeUpdate(sql);
+            if (n == 1) {
+                System.out.println("Delete successful");
+            } else {
+                System.out.println("Delete Failed");
+            }
+            c1.close();
+        } catch (Exception fe) {
+            System.out.println(fe);
+        }
+        try {
+            String sql = "delete from Schedule where secondTeam = '" + teamName + "'";
+            System.out.println(sql);
+            int n = stmt.executeUpdate(sql);
+            if (n == 1) {
+                System.out.println("Delete successful");
+            } else {
+                System.out.println("Delete Failed");
+            }
+            c1.close();
+        } catch (Exception fe) {
+            System.out.println(fe);
+        }
+    }
+    
     //========================== DeleteDB ====================================//
     public void deleteDB() {
         setupDB();

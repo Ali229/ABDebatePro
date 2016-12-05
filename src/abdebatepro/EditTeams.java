@@ -278,6 +278,9 @@ public class EditTeams extends javax.swing.JDialog {
         System.out.println(o);
         t.selectDB((Integer) o);
         t.deleteDB();
+        Schedule s1 = new Schedule();
+        String team = (String) teamTable.getValueAt(teamTable.getSelectedRow(), 1);
+        s1.deleteTeam(team);
         populateTeams();
     }//GEN-LAST:event_deleteButtonActionPerformed
     private void doClose(int retStatus) {

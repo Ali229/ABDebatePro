@@ -804,11 +804,12 @@ public class MainPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_tieButtonActionPerformed
 
     private void tieScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieScoreButtonActionPerformed
-        if (!(rescheduleTable.getSelectedRow() == -1)) {
+         if (!(rescheduleTable.getSelectedRow() == -1)) {
             int scoreOne, scoreTwo;
             scoreOne = (Integer) rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 3);
             scoreTwo = (Integer) rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 4);
-            if ((scoreOne == 0 && scoreTwo == 0) || privLabel.getText().equals("Super Referee")) {
+            String assignedRef = (String) rescheduleTable.getValueAt(rescheduleTable.getSelectedRow(), 7);
+            if ((scoreOne == 0 && scoreTwo == 0 && LoginPage.storeUser.equals(assignedRef)) || privLabel.getText().equals("Super Referee")) {
                 JTextField scoreField = new JTextField(10);
                 JTextField scoreField2 = new JTextField(10);
                 JPanel myPanel = new JPanel();
@@ -829,7 +830,7 @@ public class MainPanel extends javax.swing.JPanel {
                     if (score1.matches(regex) && score2.matches(regex)) {
                         if (Integer.parseInt(score1) >= 0 && Integer.parseInt(score1) < 11 && Integer.parseInt(score2) >= 0 && Integer.parseInt(score2) < 11) {
                             try {
-                                TieSchedule tsch = new TieSchedule();
+                                 TieSchedule tsch = new TieSchedule();
                                 System.out.println(rescheduleTable.getSelectedRow() + 1);
                                 tsch.selectDB(rescheduleTable.getSelectedRow() + 1);
                                 tsch.updateScore(tsch.getMatchNumber(), Integer.parseInt(scoreField.getText()), Integer.parseInt(scoreField2.getText()));
@@ -842,19 +843,19 @@ public class MainPanel extends javax.swing.JPanel {
                             }
                         } else {
                             JOptionPane.showMessageDialog(null, "Score should be between 0 and 10!");
-                            scoreButton.doClick();
+                            tieScoreButton.doClick();
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "Enter a valid score between 0 and 10!");
-                        scoreButton.doClick();
+                        tieScoreButton.doClick();
                     }
                 }//no else
             } else {
-                JOptionPane.showMessageDialog(null, "Only Super Referee is authorized to change scores!");
+                JOptionPane.showMessageDialog(null, "Not authorized to change scores!");
             }
         } else {
             JOptionPane.showMessageDialog(null, "You need to select a match first!");
-        }    // TODO add your handling code here:
+        }
     }//GEN-LAST:event_tieScoreButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
