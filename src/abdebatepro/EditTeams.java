@@ -146,7 +146,7 @@ public class EditTeams extends javax.swing.JDialog {
         teamTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(teamTable);
 
-        updateButton.setText("Update Team Names");
+        updateButton.setText("OK");
         updateButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 updateButtonActionPerformed(evt);
@@ -181,7 +181,7 @@ public class EditTeams extends javax.swing.JDialog {
         });
 
         topLabel.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
-        topLabel.setText("Note: Only Team Names can be edited.");
+        topLabel.setText("Note: Only Team Names can be edited & more than 1 team is required to create a schedule.");
         topLabel.setToolTipText("Note: Only Team Names can be edited.");
 
         totalTeams.setText("Total Teams: 0");

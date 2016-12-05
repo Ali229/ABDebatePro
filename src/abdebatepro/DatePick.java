@@ -205,6 +205,9 @@ public class DatePick extends javax.swing.JDialog {
                 if (item.isBefore(LocalDate.now())) {
                     setDisable(true);
                 }
+                if (item.isAfter(LocalDate.now().plusMonths(3))) {
+                    setDisable(true);
+                }
                 for (LocalDate d : Schedule.datesList) {
                     if (item.equals(d)) {
                         setDisable(true);

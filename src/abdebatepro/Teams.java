@@ -1,5 +1,6 @@
 package abdebatepro;
 //========================== Imports =========================================//
+import static abdebatepro.ABDebatePro.DBURL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -17,6 +18,7 @@ public class Teams {
     ResultSet rs;
     public ArrayList<String> allTeams = new ArrayList<String>();
     public int firstScore, secondScore, numberOfTeam;  //Used to calculate score
+    public int totalTeams;
     //========================== Constructors ================================//        
     public Teams() {
         ID = 0;
@@ -54,6 +56,21 @@ public class Teams {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             c1 = DriverManager.getConnection(ABDebatePro.DBURL);
             stmt = c1.createStatement();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    //========================== CountTeams ====================================//
+    public void countTeams() {
+        try {
+            Connection c1 = DriverManager.getConnection(DBURL);
+            Statement stmt = c1.createStatement();
+            ResultSet rs = stmt.executeQuery("select Count(ID) AS TotalNumber from Teams");
+            while (rs.next()) {
+                totalTeams = rs.getInt("TotalNumber");
+                System.out.println(totalTeams);
+            }
+            c1.close();
         } catch (Exception e) {
             System.out.println(e);
         }

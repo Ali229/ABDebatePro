@@ -558,9 +558,9 @@ public class MainPanel extends javax.swing.JPanel {
     }
     private void matchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matchButtonActionPerformed
         Teams t1 = new Teams();
-        t1.selectAllDB();
-        if (t1.getID() == 0) {
-            JOptionPane.showMessageDialog(null, "There are no teams, please add some teams!");
+        t1.countTeams();
+        if (t1.totalTeams < 2) {    
+            JOptionPane.showMessageDialog(null, "Please add some teams!");
         } else {
             if (schTable.getRowCount() > 0) {
                 JOptionPane.showMessageDialog(null, "Warning, previous Schedule would be replaced!");

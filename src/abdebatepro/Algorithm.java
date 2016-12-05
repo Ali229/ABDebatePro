@@ -200,6 +200,7 @@ public class Algorithm {
             s1.insertDB(i + 1, matchupAPN[i][1], matchupAPN[i][2], 0, 0, new java.sql.Date(weekOfGames[i].getTime()), timeSlot[i]);
         }
     }
+    
     public Date[] getDate(int numberOfTeams) {
         String dt = "";  // Start date
         int numberOfGames = (numberOfTeams * (numberOfTeams - 1)) / 2;
@@ -244,7 +245,7 @@ public class Algorithm {
         int weeklyGames1 = noOfElements / 10 + 1;
         int weeklyGames2 = noOfElements / 10;
         int[] weekPart = new int[11];
-        int[] teamCounter = new int[matchupAPN.length];
+        int[] teamCounter = new int[10];
         int repeatCounter = 0;
         String[] teamNames = new String[10];
         Teams t = new Teams();

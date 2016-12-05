@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 public class Schedule {
     //========================== Properties ==================================//
     public int MatchNumber, FirstTeamScore, SecondTeamScore;
@@ -17,6 +19,8 @@ public class Schedule {
     public Statement stmt;
     ResultSet rs;
     private PreparedStatement pstmt;
+    public String referee;
+    public ArrayList<String> allReferee = new ArrayList<String>();
     //========================== Constructors ================================//        
     public Schedule() {
         MatchNumber = 0;
@@ -274,6 +278,28 @@ public class Schedule {
         } catch (Exception e) {
             System.out.println(e);
         }
+    }
+    //========================== Assigned Referee ============================//
+    public void selectReferee() {
+        setupDB();
+        try {
+            String sql = "SELECT * from Logins where Privilege = 'Referee'";
+            pstmt = c1.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                referee = rs.getString("Username");
+                allReferee.add(referee);
+            }
+            c1.close();
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    public void randomizeRef() {
+        Random random = new Random();
+        // randomly selects an index from the arr
+        int select = random.nextInt(allReferee.size());
     }
     //========================== Main ========================================//
     public static void main(String[] args) {
