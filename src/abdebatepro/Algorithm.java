@@ -86,6 +86,11 @@ public class Algorithm {
             }
             weekPart[i] = weeklyGames2 * (i - noOfElements % 10 + 1) + weekPart[b % 10 - 1] + 1;
         }
+        if (noOfElements == 10){
+            for (int i = 0; i < 10; i++){
+                weekPart[i] = i;
+            }
+        }
         weekPart[10] = noOfElements;
         for (int i = 0; i < 11; i++) {
             System.out.println(weekPart[i]);
@@ -97,8 +102,8 @@ public class Algorithm {
         int randomTime = 0;
 
         /*String[] times = new String[2];
-        times[0] = "9 A.M.";
-        times[1] = "3 P.M.";*/
+        times[0] = "9 AM";
+        times[1] = "3 PM";*/
         boolean repeatTime = false;
         int repeatMatchupNumber1 = 0;
         int repeatMatchupNumber2 = 0;
@@ -131,7 +136,7 @@ public class Algorithm {
                     
             }*/
             for (int i = weekPart[x]; i < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i++) {
-                timeSlot[i] = "9 A.M.";
+                timeSlot[i] = "9 AM";
                 for (int j = 1; j < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x] - i; j++) {
                     if (matchupAPN[i][1].equals(matchupAPN[i + j][1]) || matchupAPN[i][1].equals(matchupAPN[i + j][2])) {
                         a++;
@@ -141,11 +146,11 @@ public class Algorithm {
                     }
                 }
                 if (a >= 1 || b >= 1) {
-                    timeSlot[i] = "3 P.M.";
+                    timeSlot[i] = "3 PM";
                     if (a >= 1) {
                         for (int j = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j < weekPart[x + 1]; j++) {
                             if (matchupAPN[i][2].equals(matchupAPN[j][1]) || matchupAPN[i][2].equals(matchupAPN[j][2])) {
-                                timeSlot[j] = "9 A.M.";
+                                timeSlot[j] = "9 AM";
                                 repeatMatchupNumber1 = j;
                             }
                         }
@@ -153,7 +158,7 @@ public class Algorithm {
                     if (b >= 1) {
                         for (int j = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j < weekPart[x + 1]; j++) {
                             if (matchupAPN[i][1].equals(matchupAPN[j][1]) || matchupAPN[i][1].equals(matchupAPN[j][2])) {
-                                timeSlot[j] = "9 A.M.";
+                                timeSlot[j] = "9 AM";
                                 repeatMatchupNumber2 = j;
                             }
                         }
@@ -163,9 +168,9 @@ public class Algorithm {
                 b = 0;
             }
             for (int i = (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; i < weekPart[x + 1]; i++) {
-                timeSlot[i] = "3 P.M.";
+                timeSlot[i] = "3 PM";
                 if (i == repeatMatchupNumber1 || i == repeatMatchupNumber2) {
-                    timeSlot[i] = "9 A.M.";
+                    timeSlot[i] = "9 AM";
                 }
                 for (int j = 1; j < weekPart[x + 1] - i; j++) {
                     if (matchupAPN[i][1].equals(matchupAPN[i + j][1]) || matchupAPN[i][1].equals(matchupAPN[i + j][2])) {
@@ -176,18 +181,18 @@ public class Algorithm {
                     }
                 }
                 if (a >= 1 || b >= 1) {
-                    timeSlot[i] = "9 A.M.";
+                    timeSlot[i] = "9 AM";
                     if (a >= 1) {
                         for (int j = weekPart[x]; j < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j++) {
                             if (matchupAPN[i][2].equals(matchupAPN[j][1]) || matchupAPN[i][2].equals(matchupAPN[j][2])) {
-                                timeSlot[j] = "3 P.M.";
+                                timeSlot[j] = "3 PM";
                             }
                         }
                     }
                     if (b >= 1) {
                         for (int j = weekPart[x]; j < (weekPart[x + 1] - weekPart[x]) / 2 + weekPart[x]; j++) {
                             if (matchupAPN[i][1].equals(matchupAPN[j][1]) || matchupAPN[i][1].equals(matchupAPN[j][2])) {
-                                timeSlot[j] = "3 P.M.";
+                                timeSlot[j] = "3 PM";
                             }
                         }
                     }
@@ -263,6 +268,11 @@ public class Algorithm {
                 a = 1;
             }
             weekPart[i] = weeklyGames2 * (i - noOfElements % 10 + 1) + weekPart[a % 10 - 1] + 1;
+        }
+        if (noOfElements == 10){
+            for (int i = 0; i < 10; i++){
+                weekPart[i] = i;
+            }
         }
         weekPart[10] = noOfElements;
         boolean repeat = false;

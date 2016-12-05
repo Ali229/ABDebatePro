@@ -226,9 +226,12 @@ public class TieSchedule {
                     }
                 }*/
                 for (int i = 0; i < noOfElements; i++) {
-                    timeSlot[i] = i + 9 + " A.M.";
+                    timeSlot[i] = i + 9 + " AM";
+                    if (i == 3){
+                        timeSlot[i] = i + 9 + " PM";
+                    }
                     if (i > 3) {
-                        timeSlot[i] = i - 3 + " P.M.";
+                        timeSlot[i] = i - 3 + " PM";
                     }
                 }
                 //Date[] weekOfGames = new Date[(count*(count-1))/2];
@@ -244,6 +247,7 @@ public class TieSchedule {
                         d1 = rs3.getDate("MatchDate");
                         System.out.println("rs3 running times " + d1);
                     }
+                    
                     c1.close();
                 } catch (Exception e) {
                     System.out.println(e);
