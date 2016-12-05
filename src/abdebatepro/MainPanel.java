@@ -40,8 +40,8 @@ public class MainPanel extends javax.swing.JPanel {
     public MainPanel() {
         initComponents();
         setupDB();
-        //bottomPanel.setVisible(false);
-        //settingsButton.setVisible(false);
+        bottomPanel.setVisible(false);
+        settingsButton.setVisible(false);
         tieScoreButton.setVisible(false);
         setCellsCentered();
         populateChangeRefBox();
@@ -346,7 +346,7 @@ public class MainPanel extends javax.swing.JPanel {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -559,6 +559,7 @@ public class MainPanel extends javax.swing.JPanel {
     private void matchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_matchButtonActionPerformed
         Teams t1 = new Teams();
         t1.countTeams();
+        Schedule s1 = new Schedule();
         if (t1.totalTeams < 2) {    
             JOptionPane.showMessageDialog(null, "Please add some teams!");
         } else {
@@ -570,6 +571,7 @@ public class MainPanel extends javax.swing.JPanel {
                     a.makeSch();
                     a.insertSch();
                     populateDropBox();
+                    s1.selectReferee();
                     Refresh();
                 }
             } else {
@@ -577,6 +579,7 @@ public class MainPanel extends javax.swing.JPanel {
                 a.makeSch();
                 a.insertSch();
                 populateDropBox();
+                s1.selectReferee();
                 Refresh();
             }
         }
@@ -665,7 +668,6 @@ public class MainPanel extends javax.swing.JPanel {
                 System.out.println("Error was here:" + e);
             }
         } else if (tabs.getSelectedIndex() == 2) {
-            
             refreshTie();
             bottomPanel.setVisible(true);
             tieScoreButton.setVisible(true);
@@ -797,7 +799,7 @@ public class MainPanel extends javax.swing.JPanel {
             }
         TieSchedule ts1 = new TieSchedule();
         ts1.tie();
-        
+        ts1.selectReferee();
     }//GEN-LAST:event_tieButtonActionPerformed
 
     private void tieScoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tieScoreButtonActionPerformed
