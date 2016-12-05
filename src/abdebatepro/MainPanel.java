@@ -641,6 +641,7 @@ public class MainPanel extends javax.swing.JPanel {
     private void editTeamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editTeamActionPerformed
         EditTeams et = new EditTeams(ABDebatePro.ab, true);
         et.setVisible(true);
+        Refresh();
     }//GEN-LAST:event_editTeamActionPerformed
 
     private void startDateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startDateButtonActionPerformed
