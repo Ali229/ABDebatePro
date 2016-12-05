@@ -255,7 +255,6 @@ public class MainPanel extends javax.swing.JPanel {
         loginLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         rightSidePanel.add(loginLabel);
 
-        privLabel.setText("   ");
         privLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
         rightSidePanel.add(privLabel);
 
@@ -573,6 +572,8 @@ public class MainPanel extends javax.swing.JPanel {
                     populateDropBox();
                     s1.selectReferee();
                     Refresh();
+                    TieSchedule ts = new TieSchedule();
+                    ts.deleteTieSchedule();
                 }
             } else {
                 a.count();
@@ -581,6 +582,8 @@ public class MainPanel extends javax.swing.JPanel {
                 populateDropBox();
                 s1.selectReferee();
                 Refresh();
+                TieSchedule ts = new TieSchedule();
+                ts.deleteTieSchedule();
             }
         }
     }//GEN-LAST:event_matchButtonActionPerformed
@@ -670,6 +673,9 @@ public class MainPanel extends javax.swing.JPanel {
             }
         } else if (tabs.getSelectedIndex() == 2) {
             refreshTie();
+            if (privLabel.getText().equals("")) {
+                
+            } else {
             bottomPanel.setVisible(true);
             tieScoreButton.setVisible(true);
             scoreButton.setVisible(false);
@@ -678,7 +684,11 @@ public class MainPanel extends javax.swing.JPanel {
             changeMatchDate.setVisible(false);
             matchButton.setVisible(false);
             tieButton.setVisible(false);
+            }
         } else if (tabs.getSelectedIndex() == 0) {
+            if (privLabel.getText().equals("")) {
+                
+            } else {
             bottomPanel.setVisible(true);
             tieScoreButton.setVisible(false);
             scoreButton.setVisible(true);
@@ -687,6 +697,7 @@ public class MainPanel extends javax.swing.JPanel {
             changeMatchDate.setVisible(true);
             matchButton.setVisible(true);
             tieButton.setVisible(true);
+            }
         }
     }//GEN-LAST:event_tabsStateChanged
     public void refreshTie() {

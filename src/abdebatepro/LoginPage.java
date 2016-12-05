@@ -199,8 +199,10 @@ public class LoginPage extends javax.swing.JDialog {
                 MainPanel.settingsButton.setVisible(true);
                 if (rs.getString("Privilege").equals("Super Referee")) {
                     MainPanel.superPanel.setVisible(true);
+                    MainPanel.tabs.setSelectedIndex(0);
                 } else if (rs.getString("Privilege").equals("Referee")) {
                     MainPanel.superPanel.setVisible(false);
+                    MainPanel.tabs.setSelectedIndex(0);
                 }
                 doClose(RET_OK);
             } else {
