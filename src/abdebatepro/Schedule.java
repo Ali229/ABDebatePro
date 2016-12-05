@@ -1,5 +1,6 @@
 package abdebatepro;
 //========================== Imports =========================================//
+import static abdebatepro.ABDebatePro.DBURL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -21,6 +22,7 @@ public class Schedule {
     private PreparedStatement pstmt;
     public String referee;
     public ArrayList<String> allReferee = new ArrayList<String>();
+    int totalGames;
     //========================== Constructors ================================//        
     public Schedule() {
         MatchNumber = 0;
@@ -295,11 +297,47 @@ public class Schedule {
         } catch (Exception e) {
             System.out.println(e);
         }
+        count();
     }
-    public void randomizeRef() {
-        Random random = new Random();
-        // randomly selects an index from the arr
-        int select = random.nextInt(allReferee.size());
+    public void count() {
+        try {
+            Connection c1 = DriverManager.getConnection(DBURL);
+            Statement stmt = c1.createStatement();
+            ResultSet rs = stmt.executeQuery("select Count(MatchNumber) AS TotalNumber from Schedule");
+            while (rs.next()) {
+                totalGames = rs.getInt("TotalNumber");
+            }
+            c1.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        updateAssignedReferee();
+    }
+    public void updateAssignedReferee() {
+        setupDB();
+        try {
+            for (int x = 1; x <= totalGames; x++) {
+                //allReferee.forEach(s -> System.out.println(s));
+                //int y = 0;
+                //String selectedRef = allReferee.get(y);
+                String sql = "update Schedule set AssignedReferee = ? where MatchNumber = ?";
+                System.out.println(sql);
+                PreparedStatement pstmt = c1.prepareStatement(sql);
+                pstmt.setString(1, allReferee.get(x%allReferee.size()));
+                //pstmt.setString(1, selectedRef);
+                pstmt.setInt(2, x);
+                int z = pstmt.executeUpdate();;
+                if (z == 1) {
+                    System.out.println("Update successful");
+                } else {
+                    System.out.println("Update Failed");
+                }
+            }
+            pstmt.close();
+            c1.close();
+        } catch (Exception fe) {
+            System.out.println(fe);
+        }
     }
     //========================== Main ========================================//
     public static void main(String[] args) {

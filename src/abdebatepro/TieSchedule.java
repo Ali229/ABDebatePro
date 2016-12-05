@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package abdebatepro;
+import static abdebatepro.ABDebatePro.DBURL;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -27,6 +28,9 @@ public class TieSchedule {
     public Statement stmt;
     ResultSet rs;
     private PreparedStatement pstmt;
+    public String referee;
+    public ArrayList<String> allReferee = new ArrayList<String>();
+    int totalGames;
     //========================== Constructors ================================//        
     public TieSchedule() {
         MatchNumber = 0;
@@ -315,6 +319,64 @@ public class TieSchedule {
             } else {
                 System.out.println("Delete Failed on All");
             }
+            c1.close();
+        } catch (Exception fe) {
+            System.out.println(fe);
+        }
+    }
+    //========================== Assigned Referee ============================//
+    public void selectReferee() {
+        setupDB();
+        try {
+            String sql = "SELECT * from Logins where Privilege = 'Referee'";
+            pstmt = c1.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                referee = rs.getString("Username");
+                allReferee.add(referee);
+            }
+            c1.close();
+            pstmt.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        count();
+    }
+    public void count() {
+        try {
+            Connection c1 = DriverManager.getConnection(DBURL);
+            Statement stmt = c1.createStatement();
+            ResultSet rs = stmt.executeQuery("select Count(MatchNumber) AS TotalNumber from TieSchedule");
+            while (rs.next()) {
+                totalGames = rs.getInt("TotalNumber");
+            }
+            c1.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        updateAssignedReferee();
+    }
+    public void updateAssignedReferee() {
+        setupDB();
+        try {
+            for (int x = 1; x <= totalGames; x++) {
+                //allReferee.forEach(s -> System.out.println(s));
+                //int y = 0;
+                //String selectedRef = allReferee.get(y);
+                String sql = "update TieSchedule set AssignedReferee = ? where MatchNumber = ?";
+                System.out.println(sql);
+                PreparedStatement pstmt = c1.prepareStatement(sql);
+                pstmt.setString(1, allReferee.get(x%allReferee.size()));
+                //pstmt.setString(1, selectedRef);
+                pstmt.setInt(2, x);
+                int z = pstmt.executeUpdate();;
+                if (z == 1) {
+                    System.out.println("Update successful");
+                } else {
+                    System.out.println("Update Failed");
+                }
+            }
+            pstmt.close();
             c1.close();
         } catch (Exception fe) {
             System.out.println(fe);
